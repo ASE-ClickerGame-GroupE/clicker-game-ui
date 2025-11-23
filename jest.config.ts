@@ -1,4 +1,4 @@
-import type { Config } from '@jest/types';
+import type { Config } from '@jest/types'
 
 const config: Config.InitialOptions = {
   rootDir: './',
@@ -9,8 +9,12 @@ const config: Config.InitialOptions = {
   testEnvironment: 'jest-environment-jsdom',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   transform: {
-    '^.+\\.(ts|tsx)$': ['ts-jest', {tsconfig: '<rootDir>/tsconfig.jest.json'}],
-  }
-};
+    '^.+\\.(ts|tsx)$': [
+      'ts-jest',
+      { tsconfig: '<rootDir>/tsconfig.jest.json' },
+    ],
+  },
+  testPathIgnorePatterns: ['/node_modules/', 'e2e'],
+}
 
-export default config;
+export default config

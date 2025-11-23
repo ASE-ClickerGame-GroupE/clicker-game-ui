@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import { HomePage } from '../Home.page'
+import { HomePage } from './Home.page'
 
 test('renders welcome heading and paragraph', () => {
   render(<HomePage />)
