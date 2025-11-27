@@ -40,18 +40,20 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     if (!isPlaying) return;
 
-    if (timeLeft <= 0) {
-      setIsPlaying(false);
-      setIsGameOver(true);
-      setTargetPosition(null);
-      return;
-    }
-
     const intervalId = window.setInterval(() => {
-      setTimeLeft(prev => prev - 1);
+      setTimeLeft(prev => Math.max(0, prev - 1));
     }, 1000);
 
     return () => window.clearInterval(intervalId);
+  }, [isPlaying]);
+
+  // Separate effect to handle game over when time runs out
+  useEffect(() => {
+    if (isPlaying && timeLeft === 0) {
+      setIsPlaying(false);
+      setIsGameOver(true);
+      setTargetPosition(null);
+    }
   }, [isPlaying, timeLeft]);
 
   return (
