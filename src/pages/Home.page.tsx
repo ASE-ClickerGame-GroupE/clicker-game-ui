@@ -40,19 +40,20 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     if (!isPlaying) return;
 
-    if (timeLeft <= 0) {
-      setIsPlaying(false);
-      setIsGameOver(true);
-      setTargetPosition(null);
-      return;
-    }
-
     const intervalId = window.setInterval(() => {
-      setTimeLeft(prev => prev - 1);
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          setIsPlaying(false);
+          setIsGameOver(true);
+          setTargetPosition(null);
+          return 0;
+        }
+        return prev - 1;
+      });
     }, 1000);
 
     return () => window.clearInterval(intervalId);
-  }, [isPlaying, timeLeft]);
+  }, [isPlaying]);
 
   return (
     <Box
