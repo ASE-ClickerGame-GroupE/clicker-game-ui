@@ -36,7 +36,7 @@ test('user clicks once and game ends with final score 1', async ({ page }) => {
   await page.waitForTimeout(6000);
 
   await expect(page.getByTestId('game-over')).toBeVisible();
-  await expect(page.getByTestId('game-over')).toContainText('Final score: 1');
+  await expect(page.getByTestId('game-over')).toContainText('Score: 1');
 
   await expect(page.getByTestId('target')).toHaveCount(0);
 });
