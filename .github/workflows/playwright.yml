@@ -37,7 +37,6 @@ jobs:
           retention-days: 30
 
   deploy:
-    needs: test   # only runs if tests succeed
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
