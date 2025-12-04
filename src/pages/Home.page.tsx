@@ -50,6 +50,7 @@ const HomePage: React.FC = () => {
   // Separate effect to handle game over when time runs out
   useEffect(() => {
     if (isPlaying && timeLeft === 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsPlaying(false);
       setIsGameOver(true);
       setTargetPosition(null);
