@@ -20,7 +20,7 @@ jobs:
     - name: Run unit tests (Jest)
       run: npm test
     - name: Start server
-      run: npm run dev
+      run: npm run start
     - name: Wait for server to be ready
       run: npx wait-on http://localhost:5173
     - name: Install Playwright browsers
