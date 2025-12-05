@@ -1,61 +1,61 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Box, Button, Typography, Paper, Stack } from '@mui/material';
+import React, { useCallback, useEffect, useState } from 'react'
+import { Box, Button, Typography, Paper, Stack } from '@mui/material'
 
-const GAME_DURATION_SECONDS = 5;
+const GAME_DURATION_SECONDS = 5
 
 type TargetPosition = {
-  x: number;
-  y: number;
-};
+  x: number
+  y: number
+}
 
 const getRandomPosition = (): TargetPosition => {
-  const x = 10 + Math.random() * 80;
-  const y = 10 + Math.random() * 80;
-  return { x, y };
-};
+  const x = 10 + Math.random() * 80
+  const y = 10 + Math.random() * 80
+  return { x, y }
+}
 
 const HomePage: React.FC = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isGameOver, setIsGameOver] = useState(false);
-  const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState<number>(GAME_DURATION_SECONDS);
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [isGameOver, setIsGameOver] = useState(false)
+  const [score, setScore] = useState(0)
+  const [timeLeft, setTimeLeft] = useState<number>(GAME_DURATION_SECONDS)
   const [targetPosition, setTargetPosition] = useState<TargetPosition | null>(
     null
-  );
+  )
 
   const startGame = () => {
-    setIsPlaying(true);
-    setIsGameOver(false);
-    setScore(0);
-    setTimeLeft(GAME_DURATION_SECONDS);
-    setTargetPosition(getRandomPosition());
-  };
+    setIsPlaying(true)
+    setIsGameOver(false)
+    setScore(0)
+    setTimeLeft(GAME_DURATION_SECONDS)
+    setTargetPosition(getRandomPosition())
+  }
 
   const handleTargetClick = useCallback(() => {
-    if (!isPlaying) return;
-    setScore(prev => prev + 1);
-    setTargetPosition(getRandomPosition());
-  }, [isPlaying]);
+    if (!isPlaying) return
+    setScore((prev) => prev + 1)
+    setTargetPosition(getRandomPosition())
+  }, [isPlaying])
 
   useEffect(() => {
-    if (!isPlaying) return;
+    if (!isPlaying) return
 
     const intervalId = window.setInterval(() => {
-      setTimeLeft(prev => Math.max(0, prev - 1));
-    }, 1000);
+      setTimeLeft((prev) => Math.max(0, prev - 1))
+    }, 1000)
 
-    return () => window.clearInterval(intervalId);
-  }, [isPlaying]);
+    return () => window.clearInterval(intervalId)
+  }, [isPlaying])
 
   // Separate effect to handle game over when time runs out
   useEffect(() => {
     if (isPlaying && timeLeft === 0) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setIsPlaying(false);
-      setIsGameOver(true);
-      setTargetPosition(null);
+      setIsPlaying(false)
+      setIsGameOver(true)
+      setTargetPosition(null)
     }
-  }, [isPlaying, timeLeft]);
+  }, [isPlaying, timeLeft])
 
   return (
     <Box
@@ -181,7 +181,7 @@ const HomePage: React.FC = () => {
         )}
       </Paper>
     </Box>
-  );
-};
+  )
+}
 
-export default HomePage;
+export default HomePage
