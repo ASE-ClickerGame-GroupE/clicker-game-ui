@@ -18,7 +18,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <BrowserRouter>
+      <BrowserRouter basename="/clicker-game-ui">
         <Routes>
           <Route path="*" element={<HomePage />} />
         </Routes>
