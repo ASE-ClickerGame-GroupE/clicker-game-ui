@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Box, Button, Typography, Paper, Stack } from '@mui/material'
-import targetImage from '../../public/target.png'
+import targetImage from '../assets/target.png'
 
 const GAME_DURATION_SECONDS = 5
 
