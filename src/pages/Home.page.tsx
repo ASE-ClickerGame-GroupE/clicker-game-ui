@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Box, Button, Typography, Paper, Stack } from '@mui/material'
 import targetImage from '../assets/target.png'
+import { useFetchResults } from '../hooks/useFetchResults.ts'
 
 const GAME_DURATION_SECONDS = 5
 
@@ -23,6 +24,9 @@ const HomePage: React.FC = () => {
   const [targetPosition, setTargetPosition] = useState<TargetPosition | null>(
     null
   )
+
+  const data = useFetchResults()
+  console.log(data, 'data')
 
   const startGame = () => {
     setIsPlaying(true)
