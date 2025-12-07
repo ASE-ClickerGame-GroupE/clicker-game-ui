@@ -16,9 +16,23 @@ const theme = createTheme({
 
 // Normalize Vite's BASE_URL so it works as a react-router basename.
 // Vite sets import.meta.env.BASE_URL from vite.config.ts `base` (e.g. '/clicker-game-ui/').
-// - If BASE_URL is '/', keep it as '/' (root)
-// - Otherwise strip the trailing slash so basename doesn't end up with a trailing '/'
-const routerBasename = import.meta.env.BASE_URL === '/' ? '/' : import.meta.env.BASE_URL.replace(/\/$/, '')
+// Handle cases:
+// - '/' or '' => '/'
+// - './' or '.' => '/' (relative build; treat as root for routing)
+// - otherwise strip trailing slash and ensure it starts with '/'
+const rawBase = (import.meta.env.BASE_URL ?? '/')
+let routerBasename = '/'
+
+if (rawBase === '/' || rawBase === '') {
+  routerBasename = '/'
+} else if (rawBase === './' || rawBase === '.') {
+  // relative build (single-file or similar) — routing should behave as root
+  routerBasename = '/'
+} else {
+  // strip trailing slash and ensure it starts with '/'
+  const stripped = rawBase.replace(/\/$/, '')
+  routerBasename = stripped.startsWith('/') ? stripped : `/${stripped}`
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
