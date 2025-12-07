@@ -14,6 +14,10 @@ const config: Config.InitialOptions = {
       { tsconfig: '<rootDir>/tsconfig.jest.json' },
     ],
   },
+  moduleNameMapper: {
+    '\\.(jpg|jpeg|png|gif|webp|avif|svg)$': '<rootDir>/__mocks__/fileMock.ts',
+    '\\.(css|less|scss)$': 'identity-obj-proxy'
+  },
   testPathIgnorePatterns: ['/node_modules/', 'e2e'],
 }
 

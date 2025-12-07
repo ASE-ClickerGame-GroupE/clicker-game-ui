@@ -4,10 +4,11 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import HomePage from './Home.page';
+import { QueryProviderWrapper } from '../test-helpers/wrappers'
 
 describe('HomePage Aim Clicker', () => {
   test('shows only play button initially', () => {
-    render(<HomePage />);
+    render(<HomePage />, { wrapper: QueryProviderWrapper })
 
     expect(screen.getByTestId('play-button')).toBeInTheDocument();
     expect(screen.getByText('Aim Clicker')).toBeInTheDocument();
@@ -20,7 +21,7 @@ describe('HomePage Aim Clicker', () => {
 
   test('starts game and increments score when target is clicked once', async () => {
     const user = userEvent.setup();
-    render(<HomePage />);
+    render(<HomePage />, { wrapper: QueryProviderWrapper })
 
     await user.click(screen.getByTestId('play-button'));
 

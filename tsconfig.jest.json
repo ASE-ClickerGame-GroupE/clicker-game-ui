@@ -10,7 +10,9 @@
     "noEmit": true,
     "skipLibCheck": true,
     "lib": ["DOM", "ES2019"],
-    "types": ["vite/client", "node", "jest", "@testing-library/jest-dom" ],
+    "types": ["vite/client", "node", "jest", "@testing-library/jest-dom"],
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true
   },
-  "include": ["test", "**/*.test.ts", "**/*.test.tsx", "**/__tests__/*"]
+  "include": ["src/**/*", "test", "**/*.test.ts", "**/*.test.tsx", "**/__tests__/*"]
 }

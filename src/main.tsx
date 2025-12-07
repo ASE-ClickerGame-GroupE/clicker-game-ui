@@ -4,11 +4,17 @@ import { BrowserRouter, Route, Routes } from 'react-router'
 import HomePage from './pages/Home.page.tsx'
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material'
 import './index.css'
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 
 const routerBasename = ((): string => {
   const base = import.meta.env.BASE_URL ?? '/'
   try {
-    console.log('BASE_URL (raw):', base, 'document.baseURI:', typeof document !== 'undefined' ? document.baseURI : 'undefined')
+    console.log(
+      'BASE_URL (raw):',
+      base,
+      'document.baseURI:',
+      typeof document !== 'undefined' ? document.baseURI : 'undefined'
+    )
   } catch {
     // ignore
   }
@@ -22,14 +28,22 @@ const routerBasename = ((): string => {
     try {
       const pathname = new URL(document.baseURI).pathname || '/'
       if (pathname === '/' || pathname === '') {
-        console.log('relative BASE_URL detected; resolved routerBasename -> / (root)')
+        console.log(
+          'relative BASE_URL detected; resolved routerBasename -> / (root)'
+        )
         return '/'
       }
       const resolved = pathname.replace(/\/$/, '')
-      console.log('relative BASE_URL detected; resolved routerBasename ->', resolved)
+      console.log(
+        'relative BASE_URL detected; resolved routerBasename ->',
+        resolved
+      )
       return resolved
     } catch (e) {
-      console.error('error deriving basename from document.baseURI, falling back to /', e)
+      console.error(
+        'error deriving basename from document.baseURI, falling back to /',
+        e
+      )
       return '/'
     }
   }
@@ -47,17 +61,21 @@ const theme = createTheme({
   },
 })
 
+const queryClient = new QueryClient()
+
 try {
   console.log('mounting app with basename=', routerBasename)
   createRoot(document.getElementById('root')!).render(
     <StrictMode>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <BrowserRouter basename={routerBasename}>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-          </Routes>
-        </BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter basename={routerBasename}>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+            </Routes>
+          </BrowserRouter>
+        </QueryClientProvider>
       </ThemeProvider>
     </StrictMode>
   )
