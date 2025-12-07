@@ -20,7 +20,7 @@ createRoot(document.getElementById('root')!).render(
       <CssBaseline />
       <BrowserRouter>
         <Routes>
-          <Route path="*" element={<HomePage />} />
+          <Route path="/" element={<HomePage />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Box, Button, Typography, Paper, Stack } from '@mui/material'
+import targetImage from '../assets/target.png'
 
 const GAME_DURATION_SECONDS = 5
 
@@ -137,7 +138,7 @@ const HomePage: React.FC = () => {
                 <Box
                   component="img"
                   data-testid="target"
-                  src="/target.png"
+                  src={targetImage}
                   alt="Target"
                   onClick={handleTargetClick}
                   sx={{
