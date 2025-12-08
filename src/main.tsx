@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Route, Routes } from 'react-router'
 import HomePage from './pages/Home.page.tsx'
-import { CssBaseline, ThemeProvider, createTheme } from '@mui/material'
+import { CssBaseline, ThemeProvider, createTheme, GlobalStyles } from '@mui/material'
 import './index.css'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 
@@ -69,6 +69,16 @@ try {
     <StrictMode>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <GlobalStyles
+          styles={{
+            'html, body, #root': {
+              height: '100%',
+              margin: 0,
+              padding: 0,
+              backgroundColor: '#020617',
+            },
+          }}
+        />
         <QueryClientProvider client={queryClient}>
           <BrowserRouter basename={routerBasename}>
             <Routes>
