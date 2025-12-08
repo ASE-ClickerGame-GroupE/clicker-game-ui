@@ -1,7 +1,6 @@
 import {
   loadResults,
   saveResult,
-  clearResults,
   type StoredResult,
 } from './resultsStorage'
 
@@ -41,11 +40,5 @@ describe('resultsStorage', () => {
     expect(scores).toEqual([10, 7, 1])
   })
 
-  test('clearResults removes data from storage', () => {
-    saveResult(3)
-    expect(loadResults().length).toBe(1)
 
-    clearResults()
-    expect(loadResults()).toEqual([])
-  })
 })

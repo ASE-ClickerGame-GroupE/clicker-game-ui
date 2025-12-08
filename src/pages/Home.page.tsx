@@ -2,14 +2,14 @@ import React from 'react'
 import { Box, Button } from '@mui/material'
 import { GameSection } from '../components/GameSection'
 import { ResultsSection } from '../components/ResultsSection'
-import { useStoredResults } from '../hooks/useStoredResults.tsx'
+import { useResults } from '../hooks/useResults'
 import { useAuth } from '../hooks/useAuth'
 import { useNavigate } from 'react-router'
 
 const HomePage: React.FC = () => {
-  const { results, addResult } = useStoredResults()
   const { logout, isAuthenticated } = useAuth()
   const navigate = useNavigate()
+  const { results, addResult } = useResults(isAuthenticated)
 
   const handleGameEnd = (score: number) => {
     addResult(score)

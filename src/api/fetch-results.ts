@@ -1,14 +1,20 @@
-import result from '../assets/results.json'
+import axios from 'axios'
+import type { StoredResult } from '../storage/resultsStorage'
 
-export interface IResult {
+export interface BackendResult {
   id: string
-  scores: number
-  // Timestamp in milliseconds
   finishedAt: number
+  scores: number
 }
 
-export const fetchResults = async (): Promise<{ data: IResult[] }> => {
-  return new Promise((resolve) => {
-    resolve({ data: result })
-  })
+const mapBackendResult = (raw: BackendResult): StoredResult => ({
+  id: raw.id,
+  finishedAt: raw.finishedAt,
+  score: raw.scores,
+})
+
+export const fetchResults = async (): Promise<StoredResult[]> => {
+  const response = await axios.get<BackendResult[]>('/api/results')
+
+  return response.data.map(mapBackendResult)
 }

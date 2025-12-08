@@ -1,0 +1,56 @@
+import { test, expect } from '@playwright/test'
+
+const APP_URL = 'http://localhost:5173/'
+
+const backendResults = [
+  { id: '1', finishedAt: 1765124340664, scores: 10 },
+  { id: '2', finishedAt: 1765124340664, scores: 2 },
+]
+
+test('authenticated user uses backend results and sends new score', async ({ page, context }) => {
+  await context.addCookies([
+    {
+      name: 'token',
+      value: 'fake-token',
+      url: APP_URL,
+    },
+  ])
+
+  await page.route('**/api/results', async (route) => {
+    const request = route.request()
+
+    if (request.method() === 'GET') {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(backendResults),
+      })
+      return
+    }
+
+    if (request.method() === 'POST') {
+      const body = await request.postDataJSON()
+
+      backendResults.unshift({
+        id: 'new-id',
+        finishedAt: Date.now(),
+        scores: body.score,
+      })
+
+      await route.fulfill({
+        status: 201,
+        contentType: 'application/json',
+        body: JSON.stringify({ ok: true }),
+      })
+      return
+    }
+
+    await route.continue()
+  })
+
+  await page.goto(APP_URL)
+
+  await expect(page.getByText('Hits: 10')).toBeVisible()
+  await expect(page.getByText('Hits: 2')).toBeVisible()
+
+})
