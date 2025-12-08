@@ -7,10 +7,9 @@ import { useAuth } from '../hooks/useAuth'
 import { useNavigate } from 'react-router'
 
 const HomePage: React.FC = () => {
-  const { results, addResult } = useResults(isAuth)
   const { logout, isAuthenticated } = useAuth()
   const navigate = useNavigate()
-  const isAuth = window.localStorage.getItem('isAuth') === 'true'
+  const { results, addResult } = useResults(isAuthenticated)
 
   const handleGameEnd = (score: number) => {
     addResult(score)

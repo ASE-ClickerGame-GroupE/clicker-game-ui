@@ -11,7 +11,7 @@ type UseResultsReturn = {
   error: unknown
 }
 
-export const useResults = (isAuth: boolean): UseResultsReturn => {
+export const useResults = (isAuthenticated: boolean): UseResultsReturn => {
   const queryClient = useQueryClient()
 
   const {
@@ -33,7 +33,7 @@ export const useResults = (isAuth: boolean): UseResultsReturn => {
     },
   })
 
-  if (!isAuth) {
+  if (!isAuthenticated) {
     return {
       results: storedResults,
       addResult: addStoredResult,
