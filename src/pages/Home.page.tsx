@@ -2,10 +2,12 @@ import React from 'react'
 import { Box } from '@mui/material'
 import { GameSection } from '../components/GameSection'
 import { ResultsSection } from '../components/ResultsSection'
-import { useStoredResults } from '../hooks/useStoredResults.tsx'
+import { useResults } from '../hooks/useResults'
 
 const HomePage: React.FC = () => {
-  const { results, addResult } = useStoredResults()
+  const isAuth = window.localStorage.getItem('isAuth') === 'true'
+
+  const { results, addResult } = useResults(isAuth)
 
   const handleGameEnd = (score: number) => {
     addResult(score)

@@ -1,3 +1,4 @@
+// src/hooks/useStoredResults.test.tsx
 import { renderHook, act } from '@testing-library/react'
 import { useStoredResults } from './useStoredResults.tsx'
 import * as storage from '../storage/resultsStorage'
@@ -5,7 +6,6 @@ import * as storage from '../storage/resultsStorage'
 describe('useStoredResults', () => {
   const loadSpy = jest.spyOn(storage, 'loadResults')
   const saveSpy = jest.spyOn(storage, 'saveResult')
-  const clearSpy = jest.spyOn(storage, 'clearResults')
 
   beforeEach(() => {
     jest.resetAllMocks()
@@ -41,22 +41,5 @@ describe('useStoredResults', () => {
 
     expect(saveSpy).toHaveBeenCalledWith(7)
     expect(result.current.results).toEqual(savedResults)
-  })
-
-  test('resetResults clears storage and resets state', () => {
-    loadSpy.mockReturnValue([
-      { id: '1', score: 3, finishedAt: 1 },
-    ])
-
-    const { result } = renderHook(() => useStoredResults())
-
-    expect(result.current.results).toHaveLength(1)
-
-    act(() => {
-      result.current.resetResults()
-    })
-
-    expect(clearSpy).toHaveBeenCalledTimes(1)
-    expect(result.current.results).toEqual([])
   })
 })

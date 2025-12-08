@@ -1,13 +1,26 @@
-import { describe, it, expect } from '@jest/globals'
-import { fetchResults } from './fetch-results'
-import result from '../assets/results.json'
+import { describe, expect, test, jest } from '@jest/globals'
+import axios from 'axios'
+import { fetchResults, type BackendResult } from './fetch-results'
+
+jest.mock('axios')
+const mockedAxios = axios as jest.Mocked<typeof axios>
 
 describe('fetchResults', () => {
-  it('returns the data from assets/results.json', async () => {
-    const res = await fetchResults()
-    expect(res).toBeDefined()
-    expect(res).toHaveProperty('data')
-    expect(res.data).toEqual(result)
+  test('calls /api/results and maps backend response to StoredResult', async () => {
+    const backendData: BackendResult[] = [
+      { id: '1', finishedAt: 1000, scores: 10 },
+      { id: '2', finishedAt: 2000, scores: 5 },
+    ]
+
+    mockedAxios.get.mockResolvedValue({ data: backendData })
+
+    const results = await fetchResults()
+
+    expect(mockedAxios.get).toHaveBeenCalledWith('/api/results')
+    expect(results).toEqual([
+      { id: '1', finishedAt: 1000, score: 10 },
+      { id: '2', finishedAt: 2000, score: 5 },
+    ])
   })
 })
 

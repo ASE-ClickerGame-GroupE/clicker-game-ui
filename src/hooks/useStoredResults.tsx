@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
 import {
-  clearResults,
   loadResults,
   saveResult,
   type StoredResult,
@@ -19,10 +18,5 @@ export const useStoredResults = () => {
     setResults(next)
   }, [])
 
-  const resetResults = useCallback(() => {
-    clearResults()
-    setResults([])
-  }, [])
-
-  return { results, addResult, resetResults }
+  return { results, addResult }
 }
