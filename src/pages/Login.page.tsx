@@ -73,7 +73,7 @@ const LoginPage: React.FC = () => {
         />
         {error && (
           <Typography color="error" mt={1}>
-            {error?.message}
+            {error.message}
           </Typography>
         )}
         <Button
