@@ -28,7 +28,7 @@ const HomePage: React.FC = () => {
     >
       <Box width="100%" display="flex" justifyContent="flex-end">
         {isAuthenticated ? (
-          <Button color="inherit" onClick={() => { logout() }}>
+          <Button color="inherit" onClick={logout}>
             Logout
           </Button>
         ) : (
