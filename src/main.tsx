@@ -2,9 +2,17 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Route, Routes } from 'react-router'
 import HomePage from './pages/Home.page.tsx'
-import { CssBaseline, ThemeProvider, createTheme, GlobalStyles } from '@mui/material'
+import LoginPage from './pages/Login.page'
+import RegisterPage from './pages/Register.page'
+import { AuthProvider } from './hooks/useAuth'
+import {
+  createTheme,
+  CssBaseline,
+  GlobalStyles,
+  ThemeProvider,
+} from '@mui/material'
 import './index.css'
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const routerBasename = ((): string => {
   const base = import.meta.env.BASE_URL ?? '/'
@@ -48,8 +56,7 @@ const routerBasename = ((): string => {
     }
   }
 
-  const normalized = base.replace(/\/$/, '')
-  return normalized
+  return base.replace(/\/$/, '')
 })()
 
 const theme = createTheme({
@@ -81,9 +88,21 @@ try {
         />
         <QueryClientProvider client={queryClient}>
           <BrowserRouter basename={routerBasename}>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-            </Routes>
+            <AuthProvider>
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <HomePage />
+                    // <ProtectedRoute>
+                    //   <HomePage />
+                    // </ProtectedRoute>
+                  }
+                />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+              </Routes>
+            </AuthProvider>
           </BrowserRouter>
         </QueryClientProvider>
       </ThemeProvider>

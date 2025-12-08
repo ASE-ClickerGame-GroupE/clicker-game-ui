@@ -5,8 +5,27 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import HomePage from './Home.page';
 import { QueryProviderWrapper } from '../test-helpers/wrappers'
+import Cookies from 'js-cookie'
+
+jest.mock('js-cookie');
 
 describe('HomePage Aim Clicker', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
+  test('shows Login button when not authenticated', () => {
+    (Cookies.get as jest.Mock).mockImplementation(() => null)
+    render(<HomePage />, { wrapper: QueryProviderWrapper })
+    expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument()
+  })
+
+  test('shows Logout button when authenticated', () => {
+    (Cookies.get as jest.Mock).mockImplementation(() => 'token-123')
+    render(<HomePage />, { wrapper: QueryProviderWrapper })
+    expect(screen.getByRole('button', { name: /logout/i })).toBeInTheDocument()
+  })
+
   test('shows only play button initially', () => {
     render(<HomePage />, { wrapper: QueryProviderWrapper })
 
