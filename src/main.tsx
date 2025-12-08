@@ -6,13 +6,13 @@ import LoginPage from './pages/Login.page'
 import RegisterPage from './pages/Register.page'
 import { AuthProvider } from './hooks/useAuth'
 import {
-  CssBaseline,
-  ThemeProvider,
   createTheme,
+  CssBaseline,
   GlobalStyles,
+  ThemeProvider,
 } from '@mui/material'
 import './index.css'
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const routerBasename = ((): string => {
   const base = import.meta.env.BASE_URL ?? '/'
@@ -56,8 +56,7 @@ const routerBasename = ((): string => {
     }
   }
 
-  const normalized = base.replace(/\/$/, '')
-  return normalized
+  return base.replace(/\/$/, '')
 })()
 
 const theme = createTheme({
