@@ -25,7 +25,7 @@ const HomePage: React.FC = () => {
       gap={6}
     >
       <Box width="100%" display="flex" justifyContent="flex-end">
-        <Button color="inherit" onClick={() => { logout() }}>
+        <Button color="inherit" onClick={logout}>
           Logout
         </Button>
       </Box>
