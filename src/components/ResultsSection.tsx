@@ -20,7 +20,7 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({ results }) => {
       }}
     >
       <Typography variant="h6" textAlign="center" gutterBottom>
-        Your Top 10 Results
+        Your Top Results
       </Typography>
 
       {results.length === 0 && (
