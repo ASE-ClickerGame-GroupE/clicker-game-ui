@@ -28,6 +28,15 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
 
+  /* Start a dev server before running the tests. Use nvm to pick Node from .nvmrc */
+  webServer: {
+    // Run the dev server directly (no nvm). If you want nvm-based switching, re-enable earlier command.
+    command: 'npm run dev',
+    url: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:5173',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120_000,
+  },
+
   /* Configure projects for major browsers */
   projects: [
     {

@@ -4,10 +4,12 @@ import { GameSection } from '../components/GameSection'
 import { ResultsSection } from '../components/ResultsSection'
 import { useStoredResults } from '../hooks/useStoredResults.tsx'
 import { useAuth } from '../hooks/useAuth'
+import { useNavigate } from 'react-router'
 
 const HomePage: React.FC = () => {
   const { results, addResult } = useStoredResults()
-  const { logout } = useAuth()
+  const { logout, isAuthenticated } = useAuth()
+  const navigate = useNavigate()
 
   const handleGameEnd = (score: number) => {
     addResult(score)
@@ -25,9 +27,15 @@ const HomePage: React.FC = () => {
       gap={6}
     >
       <Box width="100%" display="flex" justifyContent="flex-end">
-        <Button color="inherit" onClick={() => { logout() }}>
-          Logout
-        </Button>
+        {isAuthenticated ? (
+          <Button color="inherit" onClick={() => { logout() }}>
+            Logout
+          </Button>
+        ) : (
+          <Button color="inherit" onClick={() => { navigate('/login') }}>
+            Login
+          </Button>
+        )}
       </Box>
       <GameSection onGameEnd={handleGameEnd} />
       <ResultsSection results={results} />
