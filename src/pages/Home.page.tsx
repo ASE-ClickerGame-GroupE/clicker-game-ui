@@ -2,17 +2,13 @@ import React from 'react'
 import { Box } from '@mui/material'
 import { GameSection } from '../components/GameSection'
 import { ResultsSection } from '../components/ResultsSection'
-import { useFetchResults } from '../hooks/useFetchResults'
+import { useStoredResults } from '../hooks/useStoredResults.tsx'
 
 const HomePage: React.FC = () => {
-  const {
-    data: results = [],
-    isFetching,
-    error,
-  } = useFetchResults()
+  const { results, addResult } = useStoredResults()
 
   const handleGameEnd = (score: number) => {
-    console.log('Game finished with score:', score)
+    addResult(score)
   }
 
   return (
@@ -27,11 +23,7 @@ const HomePage: React.FC = () => {
       gap={6}
     >
       <GameSection onGameEnd={handleGameEnd} />
-      <ResultsSection
-        results={results}
-        loading={isFetching}
-        error={error}
-      />
+      <ResultsSection results={results} />
     </Box>
   )
 }

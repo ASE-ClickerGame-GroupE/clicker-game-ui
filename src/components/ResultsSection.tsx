@@ -1,21 +1,12 @@
 import React from 'react'
 import { Box, Paper, Stack, Typography } from '@mui/material'
-import type { IResult } from '../api/fetch-results'
+import type { StoredResult } from '../storage/resultsStorage'
 
 type ResultsSectionProps = {
-  results: IResult[]
-  loading: boolean
-  error: unknown
+  results: StoredResult[]
 }
 
-export const ResultsSection: React.FC<ResultsSectionProps> = ({
-  results,
-  loading,
-  error,
-}) => {
-  const errorMessage =
-    error instanceof Error ? error.message : error ? 'Failed to load results' : null
-
+export const ResultsSection: React.FC<ResultsSectionProps> = ({ results }) => {
   return (
     <Paper
       elevation={4}
@@ -28,34 +19,18 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({
         bgcolor: 'rgba(15,23,42,0.9)',
       }}
     >
-      <Typography
-        variant="h6"
-        textAlign="center"
-        gutterBottom
-      >
+      <Typography variant="h6" textAlign="center" gutterBottom>
         Your Top 10 Results
       </Typography>
 
-      {loading && (
-        <Typography textAlign="center" color="text.secondary">
-          Loading results…
-        </Typography>
-      )}
-
-      {errorMessage && !loading && (
-        <Typography textAlign="center" color="error">
-          {errorMessage}
-        </Typography>
-      )}
-
-      {!loading && !errorMessage && results.length === 0 && (
+      {results.length === 0 && (
         <Typography textAlign="center" color="text.secondary">
           You don&apos;t have any results yet. Play a game to see your stats
           here.
         </Typography>
       )}
 
-      {!loading && !errorMessage && results.length > 0 && (
+      {results.length > 0 && (
         <Stack
           component="ul"
           spacing={1}
@@ -65,6 +40,7 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({
             <Box
               key={result.id}
               component="li"
+              data-testid="result-row"
               sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -76,7 +52,7 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({
               }}
             >
               <Typography fontWeight={500}>{index + 1}.</Typography>
-              <Typography>Hits: {result.scores}</Typography>
+              <Typography>Hits: {result.score}</Typography>
               <Typography variant="body2" color="text.secondary">
                 {new Date(result.finishedAt).toLocaleString()}
               </Typography>

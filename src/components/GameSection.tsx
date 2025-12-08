@@ -49,7 +49,6 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
     return () => window.clearInterval(intervalId)
   }, [isPlaying])
 
-
   useEffect(() => {
     if (isPlaying && timeLeft === 0) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -68,10 +67,10 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: 2,
+        gap: 3,
         bgcolor: 'rgba(15,23,42,0.9)',
         px: { xs: 3, sm: 5, md: 6 },
-        py: { xs: 3, sm: 4 },
+        py: { xs: 4, sm: 5 },
         borderRadius: 4,
         textAlign: 'center',
       }}
@@ -81,20 +80,30 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
       </Typography>
 
       {!isPlaying && !isGameOver && (
-        <Button
-          data-testid="play-button"
-          variant="contained"
-          size="large"
-          onClick={startGame}
+        <Box
           sx={{
-            mt: 2,
-            px: { xs: 4, sm: 6 },
-            borderRadius: 999,
-            letterSpacing: '0.1em',
+            width: '100%',
+            maxWidth: 600,
+            height: 350,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
-          PLAY
-        </Button>
+          <Button
+            data-testid="play-button"
+            variant="contained"
+            size="large"
+            onClick={startGame}
+            sx={{
+              px: { xs: 4, sm: 6 },
+              borderRadius: 999,
+              letterSpacing: '0.1em',
+            }}
+          >
+            PLAY
+          </Button>
+        </Box>
       )}
 
       {isPlaying && (
@@ -104,7 +113,6 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
             spacing={{ xs: 1, sm: 3 }}
             justifyContent="center"
             alignItems="center"
-            sx={{ mt: 2, mb: 1 }}
           >
             <Typography data-testid="score">Score: {score}</Typography>
             <Typography data-testid="timer">Time left: {timeLeft}s</Typography>
@@ -115,8 +123,8 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
             sx={{
               position: 'relative',
               width: '100%',
-              maxWidth: { xs: 320, sm: 480, md: 600 },
-              height: { xs: 240, sm: 320, md: 400 },
+              maxWidth: 600,
+              height: 350,
               borderRadius: 3,
               bgcolor: '#020617',
               boxShadow: 'inset 0 0 0 1px rgba(148,163,184,0.4)',
@@ -151,9 +159,12 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
         <Box
           data-testid="game-over"
           sx={{
-            mt: 3,
+            width: '100%',
+            maxWidth: 600,
+            height: 350,
             display: 'flex',
             flexDirection: 'column',
+            justifyContent: 'center',
             alignItems: 'center',
             gap: 2,
           }}
@@ -166,7 +177,7 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
             sx={{ borderRadius: 999, px: { xs: 3, sm: 4 } }}
             onClick={startGame}
           >
-            Play again
+            PLAY AGAIN
           </Button>
         </Box>
       )}
