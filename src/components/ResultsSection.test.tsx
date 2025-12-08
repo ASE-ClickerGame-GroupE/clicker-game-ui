@@ -29,7 +29,7 @@ describe('ResultsSection', () => {
 
     render(<ResultsSection results={results} />)
 
-    expect(screen.getByText(/your top 10 results/i)).toBeInTheDocument()
+    expect(screen.getByText(/your top results/i)).toBeInTheDocument()
 
     expect(screen.getByText('1.')).toBeInTheDocument()
     expect(screen.getByText('2.')).toBeInTheDocument()
