@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom'
 
-// Polyfill TextEncoder/TextDecoder for Jest (node env)
 import { TextEncoder, TextDecoder } from 'util'
 
 if (typeof global.TextEncoder === 'undefined') {

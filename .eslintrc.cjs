@@ -22,7 +22,7 @@ module.exports = {
   },
   plugins: ['react', 'react-hooks', 'jsx-a11y', 'import', 'jest'],
   rules: {
-    'react/prop-types': 'off', // Disable prop-types rule if you're using TypeScript
+    'react/prop-types': 'off',
   },
   settings: {
     react: {
