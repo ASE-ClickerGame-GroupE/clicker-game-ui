@@ -27,7 +27,7 @@ test.skip('user plays one round, game ends with score 1 and result is persisted'
   page,
 }) => {
   // In-memory mock backend results for this test
-  const backendResults: any[] = []
+  const backendResults = []
 
   await page.route('**/game?user_id', async (route) => {
     const request = route.request()
