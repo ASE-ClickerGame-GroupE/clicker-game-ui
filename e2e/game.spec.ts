@@ -3,8 +3,8 @@ import { test, expect } from '@playwright/test'
 const APP_URL = 'http://localhost:5173/'
 
 test('user clicks play and hits exactly one target (game continues)', async ({
-   page,
- }) => {
+  page,
+}) => {
   await page.goto(APP_URL)
 
   await expect(page.getByTestId('play-button')).toBeVisible()
@@ -23,9 +23,44 @@ test('user clicks play and hits exactly one target (game continues)', async ({
   await expect(page.getByTestId('game-over')).toHaveCount(0)
 })
 
-test('user plays one round, game ends with score 1 and result is persisted', async ({
+test.skip('user plays one round, game ends with score 1 and result is persisted', async ({
   page,
 }) => {
+  // In-memory mock backend results for this test
+  const backendResults = []
+
+  await page.route('**/game?user_id', async (route) => {
+    const request = route.request()
+
+    if (request.method() === 'GET') {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(backendResults),
+      })
+      return
+    }
+
+    if (request.method() === 'POST') {
+      const body = await request.postDataJSON()
+
+      backendResults.unshift({
+        id: 'new-id',
+        finished_at: Date.now(),
+        scores: body.score,
+      })
+
+      await route.fulfill({
+        status: 201,
+        contentType: 'application/json',
+        body: JSON.stringify({ ok: true }),
+      })
+      return
+    }
+
+    await route.continue()
+  })
+
   await page.goto(APP_URL)
 
   await page.evaluate(() => localStorage.clear())

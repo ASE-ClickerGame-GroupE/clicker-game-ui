@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Box, Button, Typography, Stack } from '@mui/material'
 import targetImage from '../../assets/target.png'
 import { useFinishGame } from '../../hooks/useFinishGame/useFinishGame.ts'
@@ -25,6 +25,7 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
   const { mutate: finishGameMutate } = useFinishGame()
   const { mutate: startGameMutate } = useStartGame()
 
+  const sessionIdRef = useRef<string>('')
   const [sessionId, setSessionId] = useState<string>('')
   const [isPlaying, setIsPlaying] = useState(false)
   const [isGameOver, setIsGameOver] = useState(false)
@@ -45,6 +46,8 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
 
     startGameMutate(body, {
       onSuccess: (data) => {
+        // update ref synchronously so effects that run soon after can see it
+        sessionIdRef.current = data.session_id
         setSessionId(data.session_id)
       },
       onError: (err) => {
@@ -75,20 +78,23 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
       setIsPlaying(false)
       setIsGameOver(true)
       setTargetPosition(null)
-      onGameEnd(score)
 
-      if (!sessionId) {
+      const currentSessionId = sessionIdRef.current || sessionId
+      if (!currentSessionId) {
         console.warn('No session_id available when finishing game')
         return
       }
 
       const finishBody = {
         scores: score,
-        session_id: sessionId,
+        session_id: currentSessionId,
         finished_at: Date.now(),
       }
 
-      finishGameMutate(finishBody)
+      finishGameMutate(finishBody, {
+        onSuccess: () => onGameEnd(score),
+        onSettled: () => onGameEnd(score),
+      })
     }
   }, [isPlaying, timeLeft, score, onGameEnd, sessionId, finishGameMutate])
 
