@@ -6,7 +6,9 @@ import type { StoredResult } from '../../storage/resultsStorage.ts'
 jest.mock('../useStoredResults/useStoredResults.tsx')
 jest.mock('../useFetchResults/useFetchResults.ts')
 jest.mock('@tanstack/react-query', () => {
-  const actual = jest.requireActual('@tanstack/react-query') as typeof import('@tanstack/react-query')
+  const actual = jest.requireActual(
+    '@tanstack/react-query'
+  ) as typeof import('@tanstack/react-query')
   return {
     ...actual,
     useMutation: jest.fn(),
@@ -32,9 +34,15 @@ type UseQueryClientReturn = {
   invalidateQueries: (options: { queryKey: unknown[] }) => void
 }
 
-const mockedUseStoredResults = useStoredResults as jest.MockedFunction<typeof useStoredResults>
-const mockedUseFetchResults = useFetchResults as jest.MockedFunction<() => UseFetchResultsReturn>
-const mockedUseMutation = useMutation as unknown as jest.MockedFunction<() => UseMutationReturn>
+const mockedUseStoredResults = useStoredResults as jest.MockedFunction<
+  typeof useStoredResults
+>
+const mockedUseFetchResults = useFetchResults as unknown as jest.MockedFunction<
+  () => UseFetchResultsReturn
+>
+const mockedUseMutation = useMutation as unknown as jest.MockedFunction<
+  () => UseMutationReturn
+>
 const mockedUseQueryClient = useQueryClient as unknown as jest.MockedFunction<
   () => UseQueryClientReturn
 >
@@ -42,7 +50,9 @@ const mockedUseQueryClient = useQueryClient as unknown as jest.MockedFunction<
 describe('useResults', () => {
   const storedResults: StoredResult[] = [{ id: '1', score: 5, finishedAt: 111 }]
 
-  const fetchedResults: StoredResult[] = [{ id: '2', score: 10, finishedAt: 222 }]
+  const fetchedResults: StoredResult[] = [
+    { id: '2', score: 10, finishedAt: 222 },
+  ]
 
   const addStoredResultMock = jest.fn()
   const mutateMock = jest.fn()

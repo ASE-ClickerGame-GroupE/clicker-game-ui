@@ -19,9 +19,9 @@ const mapBackendResult = (raw: ResultsResponse): StoredResult => ({
   score: raw.scores,
 })
 
-export const fetchResults = async (userId: string): Promise<StoredResult[]> => {
+export const fetchResults = async (userId?: string): Promise<StoredResult[]> => {
   const response = await api.gameApi.get<ResultsResponse[]>(
-    `/game?user_id=${userId}`
+    `/game?user_id=${userId ?? ''}`
   )
 
   return response.data.map(mapBackendResult)
