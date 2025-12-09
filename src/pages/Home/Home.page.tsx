@@ -9,15 +9,21 @@ import { useResults } from '../../hooks/useResults/useResults.tsx'
 import { useAuth } from '../../hooks/useAuth/useAuth.tsx'
 
 const HomePage: React.FC = () => {
+  // eslint-disable-next-line no-empty-pattern
   const {
     // logout,
-    isAuthenticated,
+    // isAuthenticated,
   } = useAuth()
   // const navigate = useNavigate()
-  const { results, addResult } = useResults(isAuthenticated)
+  const { results, addResult, refetch } = useResults(true)
 
-  const handleGameEnd = (score: number) => {
-    addResult(score)
+  const handleGameEnd = async (score: number) => {
+    if (refetch) {
+      await refetch?.()
+    } else {
+      addResult?.(score)
+
+    }
   }
 
   return (

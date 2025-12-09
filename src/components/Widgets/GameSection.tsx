@@ -75,7 +75,6 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
       setIsPlaying(false)
       setIsGameOver(true)
       setTargetPosition(null)
-      onGameEnd(score)
 
       if (!sessionId) {
         console.warn('No session_id available when finishing game')
@@ -88,7 +87,9 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
         finished_at: Date.now(),
       }
 
-      finishGameMutate(finishBody)
+      finishGameMutate(finishBody, {
+        onSuccess: () => onGameEnd(score),
+      })
     }
   }, [isPlaying, timeLeft, score, onGameEnd, sessionId, finishGameMutate])
 

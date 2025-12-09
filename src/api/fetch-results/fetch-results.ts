@@ -1,5 +1,5 @@
-import axios from 'axios'
 import type { StoredResult } from '../../storage/resultsStorage.ts'
+import { api } from '../index.ts'
 
 export interface BackendResult {
   id: string
@@ -7,14 +7,22 @@ export interface BackendResult {
   scores: number
 }
 
-const mapBackendResult = (raw: BackendResult): StoredResult => ({
+export interface ResultsResponse {
+  id: string
+  finished_at: number
+  scores: number
+}
+
+const mapBackendResult = (raw: ResultsResponse): StoredResult => ({
   id: raw.id,
-  finishedAt: raw.finishedAt,
+  finishedAt: raw.finished_at,
   score: raw.scores,
 })
 
-export const fetchResults = async (): Promise<StoredResult[]> => {
-  const response = await axios.get<BackendResult[]>('/api/results')
+export const fetchResults = async (userId: string): Promise<StoredResult[]> => {
+  const response = await api.gameApi.get<ResultsResponse[]>(
+    `/game?user_id=${userId}`
+  )
 
   return response.data.map(mapBackendResult)
 }
