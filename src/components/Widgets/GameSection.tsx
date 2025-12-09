@@ -4,7 +4,7 @@ import targetImage from '../../assets/target.png'
 import { useFinishGame } from '../../hooks/useFinishGame/useFinishGame.ts'
 import { useStartGame } from '../../hooks/useStartGame/useStartGame.ts'
 import type { IStartGameBody } from '../../api/start-game/start-game.ts'
-import { useUserId } from '../../hooks/useUserId'
+import { useUserId } from '../../hooks/useUserId/useUserId.ts'
 
 const GAME_DURATION_SECONDS = 5
 
