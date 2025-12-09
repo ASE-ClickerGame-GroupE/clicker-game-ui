@@ -1,10 +1,10 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Route, Routes } from 'react-router'
-import HomePage from './pages/Home.page.tsx'
-import LoginPage from './pages/Login.page'
-import RegisterPage from './pages/Register.page'
-import { AuthProvider } from './hooks/useAuth'
+import HomePage from './pages/Home/Home.page.tsx'
+import LoginPage from './pages/Login/Login.page.tsx'
+import RegisterPage from './pages/Register/Register.page.tsx'
+import { AuthProvider } from './hooks/useAuth/useAuth.tsx'
 import {
   createTheme,
   CssBaseline,
