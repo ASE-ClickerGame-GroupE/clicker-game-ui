@@ -17,7 +17,9 @@ describe('useFinishGame', () => {
   })
 
   test('calls finishGame with given body when mutate is invoked', async () => {
-    mockedFinishGame.mockResolvedValue({} as any)
+    mockedFinishGame.mockResolvedValue(
+      {} as Awaited<ReturnType<typeof finishGame>>,
+    )
 
     const { result } = renderHook(() => useFinishGame(), {
       wrapper: QueryProviderWrapper,
