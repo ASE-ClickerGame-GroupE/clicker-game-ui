@@ -22,7 +22,6 @@ const HomePage: React.FC = () => {
       await refetch?.()
     } else {
       addResult?.(score)
-
     }
   }
 
