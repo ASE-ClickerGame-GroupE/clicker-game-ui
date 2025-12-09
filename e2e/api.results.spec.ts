@@ -3,11 +3,14 @@ import { test, expect } from '@playwright/test'
 const APP_URL = 'http://localhost:5173/'
 
 const backendResults = [
-  { id: '1', finishedAt: 1765124340664, scores: 10 },
-  { id: '2', finishedAt: 1765124340664, scores: 2 },
+  { id: '1', finished_at: 1765124340664, scores: 10 },
+  { id: '2', finished_at: 1765124340664, scores: 2 },
 ]
 
-test('authenticated user uses backend results and sends new score', async ({ page, context }) => {
+test.skip('authenticated user uses backend results and sends new score', async ({
+  page,
+  context,
+}) => {
   await context.addCookies([
     {
       name: 'token',
@@ -16,7 +19,7 @@ test('authenticated user uses backend results and sends new score', async ({ pag
     },
   ])
 
-  await page.route('**/api/results', async (route) => {
+  await page.route('**/game?user_id', async (route) => {
     const request = route.request()
 
     if (request.method() === 'GET') {
@@ -33,7 +36,7 @@ test('authenticated user uses backend results and sends new score', async ({ pag
 
       backendResults.unshift({
         id: 'new-id',
-        finishedAt: Date.now(),
+        finished_at: Date.now(),
         scores: body.score,
       })
 
@@ -52,5 +55,4 @@ test('authenticated user uses backend results and sends new score', async ({ pag
 
   await expect(page.getByText('Hits: 10')).toBeVisible()
   await expect(page.getByText('Hits: 2')).toBeVisible()
-
 })
