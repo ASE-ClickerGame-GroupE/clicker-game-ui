@@ -3,7 +3,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AuthProvider } from '../hooks/useAuth/useAuth.tsx'
 import { MemoryRouter } from 'react-router'
 
-// Single shared QueryClient for tests. Keeps tests simple and avoids recreating it.
 const defaultClient = new QueryClient({
   defaultOptions: { queries: { retry: false } },
 })

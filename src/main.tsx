@@ -16,19 +16,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const routerBasename = ((): string => {
   const base = import.meta.env.BASE_URL ?? '/'
-  try {
-    console.log(
-      'BASE_URL (raw):',
-      base,
-      'document.baseURI:',
-      typeof document !== 'undefined' ? document.baseURI : 'undefined'
-    )
-  } catch {
-    // ignore
-  }
-
   if (base === '/' || base === '') {
-    console.log('resolved routerBasename -> / (root)')
     return '/'
   }
 
@@ -36,22 +24,12 @@ const routerBasename = ((): string => {
     try {
       const pathname = new URL(document.baseURI).pathname || '/'
       if (pathname === '/' || pathname === '') {
-        console.log(
-          'relative BASE_URL detected; resolved routerBasename -> / (root)'
-        )
         return '/'
       }
-      const resolved = pathname.replace(/\/$/, '')
-      console.log(
-        'relative BASE_URL detected; resolved routerBasename ->',
-        resolved
-      )
-      return resolved
+
+      return pathname.replace(/\/$/, '')
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
-      console.error(
-        'error deriving basename from document.baseURI, falling back to /',
-        e
-      )
       return '/'
     }
   }
@@ -68,7 +46,9 @@ const theme = createTheme({
   },
 })
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { refetchOnWindowFocus: false } },
+})
 
 try {
   console.log('mounting app with basename=', routerBasename)

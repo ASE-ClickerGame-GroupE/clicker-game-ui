@@ -24,7 +24,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = (t: string) => {
     setToken(t)
     try {
-      // set cookie for 7 days; SameSite Lax
       Cookies.set('token', t, { expires: 7, path: '/', sameSite: 'lax' })
     } catch (e) {
       void e

@@ -9,7 +9,6 @@ export const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 })
 
-// Attach token from cookie to Authorization header for all requests
 api.interceptors.request.use((config) => {
   try {
     const token = Cookies.get('token')

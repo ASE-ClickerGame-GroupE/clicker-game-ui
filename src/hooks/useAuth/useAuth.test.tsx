@@ -2,7 +2,6 @@ import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { AuthProvider, useAuth } from './useAuth.tsx'
 
-// Mock js-cookie
 jest.mock('js-cookie', () => ({
   get: jest.fn(),
   set: jest.fn(),

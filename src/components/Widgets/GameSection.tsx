@@ -3,8 +3,8 @@ import { Box, Button, Typography, Stack } from '@mui/material'
 import targetImage from '../../assets/target.png'
 import { useFinishGame } from '../../hooks/useFinishGame/useFinishGame.ts'
 import { useStartGame } from '../../hooks/useStartGame/useStartGame.ts'
-import type { IFinishGameBody } from '../../api/finish-game/finish-game.ts'
 import type { IStartGameBody } from '../../api/start-game/start-game.ts'
+import { useUserId } from '../../hooks/useUserId'
 
 const GAME_DURATION_SECONDS = 5
 
@@ -20,14 +20,8 @@ const getRandomPosition = (): TargetPosition => {
   return { x, y }
 }
 
-const createUserId = () => {
-  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
-    return crypto.randomUUID()
-  }
-  return Math.random().toString(36).slice(2)
-}
-
 export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
+  const storedUserId = useUserId()
   const { mutate: finishGameMutate } = useFinishGame()
   const { mutate: startGameMutate } = useStartGame()
 
@@ -47,8 +41,7 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
     setTimeLeft(GAME_DURATION_SECONDS)
     setTargetPosition(getRandomPosition())
 
-    const userId = createUserId()
-    const body: IStartGameBody = { user_id: userId }
+    const body: IStartGameBody = { user_id: storedUserId }
 
     startGameMutate(body, {
       onSuccess: (data) => {
@@ -89,11 +82,13 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
         return
       }
 
-      finishGameMutate({
+      const finishBody = {
         scores: score,
         session_id: sessionId,
         finished_at: Date.now(),
-      })
+      }
+
+      finishGameMutate(finishBody)
     }
   }, [isPlaying, timeLeft, score, onGameEnd, sessionId, finishGameMutate])
 

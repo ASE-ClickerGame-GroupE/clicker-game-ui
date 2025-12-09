@@ -23,7 +23,6 @@ const LoginPage: React.FC = () => {
     if (!validateEmail(email) || !validatePassword(password)) return
     try {
       await mutateAsync({ email, password })
-      // redirect back to the page the user wanted to access
       const dest = location.state?.from?.pathname || '/'
       navigate(dest)
     } catch (e) {

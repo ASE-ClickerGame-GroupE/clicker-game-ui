@@ -13,7 +13,7 @@ export const useStartGame = () => {
     error,
   } = useMutation<IStartGameResponse, Error, IStartGameBody>({
     mutationKey: ['start-game'],
-    mutationFn: async (body: IStartGameBody) => await startGame(body),
+    mutationFn: startGame,
   })
 
   return { mutate, data, isPending: loading, error }

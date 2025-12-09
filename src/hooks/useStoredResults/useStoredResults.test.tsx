@@ -1,4 +1,3 @@
-// src/hooks/useStoredResults.test.tsx
 import { renderHook, act } from '@testing-library/react'
 import { useStoredResults } from './useStoredResults.tsx'
 import * as storage from '../../storage/resultsStorage.ts'
