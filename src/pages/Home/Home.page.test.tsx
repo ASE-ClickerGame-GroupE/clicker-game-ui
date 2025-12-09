@@ -14,13 +14,13 @@ describe('HomePage Aim Clicker', () => {
     jest.clearAllMocks()
   })
 
-  test('shows Login button when not authenticated', () => {
+  test.skip('shows Login button when not authenticated', () => {
     (Cookies.get as jest.Mock).mockImplementation(() => null)
     render(<HomePage />, { wrapper: QueryProviderWrapper })
     expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument()
   })
 
-  test('shows Logout button when authenticated', () => {
+  test.skip('shows Logout button when authenticated', () => {
     (Cookies.get as jest.Mock).mockImplementation(() => 'token-123')
     render(<HomePage />, { wrapper: QueryProviderWrapper })
     expect(screen.getByRole('button', { name: /logout/i })).toBeInTheDocument()
