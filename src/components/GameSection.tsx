@@ -1,6 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Box, Button, Typography, Stack } from '@mui/material'
 import targetImage from '../assets/target.png'
+import { useFinishGame } from '../hooks/useFinishGame.ts'
+import { useStartGame } from '../hooks/useStartGame.ts'
+import type { IFinishGameBody } from '../api/finish-game.ts'
+import type { IStartGameBody } from '../api/start-game.ts'
 
 const GAME_DURATION_SECONDS = 5
 
@@ -16,7 +20,18 @@ const getRandomPosition = (): TargetPosition => {
   return { x, y }
 }
 
+const createUserId = () => {
+  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+    return crypto.randomUUID()
+  }
+  return Math.random().toString(36).slice(2)
+}
+
 export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
+  const { mutate: finishGameMutate } = useFinishGame()
+  const { mutate: startGameMutate } = useStartGame()
+
+  const [sessionId, setSessionId] = useState<string>('')
   const [isPlaying, setIsPlaying] = useState(false)
   const [isGameOver, setIsGameOver] = useState(false)
   const [score, setScore] = useState(0)
@@ -31,6 +46,18 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
     setScore(0)
     setTimeLeft(GAME_DURATION_SECONDS)
     setTargetPosition(getRandomPosition())
+
+    const userId = createUserId()
+    const body: IStartGameBody = { user_id: userId }
+
+    startGameMutate(body, {
+      onSuccess: data => {
+        setSessionId(data.session_id)
+      },
+      onError: err => {
+        console.error('Failed to start game session', err)
+      },
+    })
   }
 
   const handleTargetClick = useCallback(() => {
@@ -56,8 +83,20 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
       setIsGameOver(true)
       setTargetPosition(null)
       onGameEnd(score)
+
+      if (!sessionId) {
+        console.warn('No session_id available when finishing game')
+        return
+      }
+
+      const body: IFinishGameBody = {
+        scores: score,
+        session_id: sessionId,
+        finished_at: Date.now(),
+      }
+      finishGameMutate(body)
     }
-  }, [isPlaying, timeLeft, score, onGameEnd])
+  }, [isPlaying, timeLeft, score, onGameEnd, sessionId, finishGameMutate])
 
   return (
     <Box
