@@ -9,8 +9,8 @@ const getPublicApiKey = () => {
   }
   
   // Fallback to window object for production (GitHub Pages)
-  if (typeof window !== 'undefined' && (window as any).LIVEBLOCKS_PUBLIC_KEY) {
-    return (window as any).LIVEBLOCKS_PUBLIC_KEY;
+  if (typeof window !== 'undefined' && 'LIVEBLOCKS_PUBLIC_KEY' in window) {
+    return window.LIVEBLOCKS_PUBLIC_KEY;
   }
   
   // Default key for GitHub Pages deployment
