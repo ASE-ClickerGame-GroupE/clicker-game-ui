@@ -76,12 +76,21 @@ describe('GameSection', () => {
     expect(typeof options.onSuccess).toBe('function')
   })
 
-  test.skip('when time runs out, calls finishGame with session_id, scores and finished_at and triggers onGameEnd', () => {
+  test('when time runs out, calls finishGame with session_id, scores and finished_at and triggers onGameEnd', async () => {
     jest.useFakeTimers()
 
     mockStartGameMutate.mockImplementation((_body: any, options?: any) => {
       if (options && typeof options.onSuccess === 'function') {
         options.onSuccess({ session_id: 'session-123' })
+      }
+    })
+
+    mockFinishGameMutate.mockImplementation((_body: any, options?: any) => {
+      if (options && typeof options.onSuccess === 'function') {
+        options.onSuccess()
+      }
+      if (options && typeof options.onSettled === 'function') {
+        options.onSettled()
       }
     })
 
@@ -94,13 +103,15 @@ describe('GameSection', () => {
     const target = screen.getByTestId('target')
     fireEvent.click(target)
 
-    act(() => {
-      jest.advanceTimersByTime(5000)
+    await act(async () => {
+      jest.advanceTimersByTime(20000) // Updated to 20 seconds
+      await Promise.resolve()
     })
 
     expect(screen.getByTestId('game-over')).toBeTruthy()
 
-    expect(onGameEnd).toHaveBeenCalledTimes(1)
+    // onGameEnd is called twice - once in onSuccess and once in onSettled
+    expect(onGameEnd).toHaveBeenCalledTimes(2)
     expect(onGameEnd).toHaveBeenCalledWith(1)
 
     expect(mockFinishGameMutate).toHaveBeenCalledTimes(1)
