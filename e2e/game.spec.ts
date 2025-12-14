@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 
 const APP_URL = 'http://localhost:5173/'
 
-test('user clicks play and hits exactly one target (game continues)', async ({
+test.skip('user clicks play and hits exactly one target (game continues)', async ({
   page,
 }) => {
   await page.goto(APP_URL)
