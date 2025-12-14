@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
   Box,
   Button,
@@ -25,17 +25,11 @@ const HomePage: React.FC = () => {
   // const navigate = useNavigate()
   const { results, addResult, refetch } = useResults(true)
   const [searchParams, setSearchParams] = useSearchParams()
-  const [roomId, setRoomId] = useState<string | null>(null)
-  const [gameMode, setGameMode] = useState<'select' | 'single' | 'multiplayer'>('select')
-
-  // Check URL for room ID on mount
-  useEffect(() => {
+  const [roomId, setRoomId] = useState<string | null>(() => searchParams.get('room'))
+  const [gameMode, setGameMode] = useState<'select' | 'single' | 'multiplayer'>(() => {
     const urlRoomId = searchParams.get('room')
-    if (urlRoomId) {
-      setRoomId(urlRoomId)
-      setGameMode('multiplayer')
-    }
-  }, [])
+    return urlRoomId ? 'multiplayer' : 'select'
+  })
 
   const handleGameEnd = async (score: number) => {
     if (refetch) {

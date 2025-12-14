@@ -30,11 +30,11 @@ declare global {
     // Custom user info set when authenticating with a secret key
     UserMeta: {
       id: string;
-      info: {};
+      info: Record<string, never>;
     };
 
     // Custom events, for useBroadcastEvent, useEventListener
-    RoomEvent: {};
+    RoomEvent: Record<string, never>;
   }
 }
 
