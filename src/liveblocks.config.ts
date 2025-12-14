@@ -30,11 +30,13 @@ declare global {
     // Custom user info set when authenticating with a secret key
     UserMeta: {
       id: string;
-      info: Record<string, never>;
+      // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+      info: {};
     };
 
     // Custom events, for useBroadcastEvent, useEventListener
-    RoomEvent: Record<string, never>;
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+    RoomEvent: {};
   }
 }
 
