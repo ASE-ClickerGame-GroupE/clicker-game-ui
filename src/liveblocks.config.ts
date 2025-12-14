@@ -1,8 +1,24 @@
 import { createClient, LiveObject, LiveMap } from "@liveblocks/client";
 import { createRoomContext } from "@liveblocks/react";
 
+// Get public API key from environment variable or window object (for GitHub Pages)
+const getPublicApiKey = () => {
+  // Try environment variable first (for local development)
+  if (import.meta.env.VITE_LIVEBLOCKS_API_KEY) {
+    return import.meta.env.VITE_LIVEBLOCKS_API_KEY;
+  }
+  
+  // Fallback to window object for production (GitHub Pages)
+  if (typeof window !== 'undefined' && (window as any).LIVEBLOCKS_PUBLIC_KEY) {
+    return (window as any).LIVEBLOCKS_PUBLIC_KEY;
+  }
+  
+  // Default key for GitHub Pages deployment
+  return import.meta.env.VITE_LIVEBLOCKS_PUBLIC_KEY || "";
+};
+
 const client = createClient({
-  publicApiKey: import.meta.env.VITE_LIVEBLOCKS_API_KEY || "",
+  publicApiKey: getPublicApiKey(),
 });
 
 // Declare Liveblocks types for the application
