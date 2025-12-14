@@ -122,8 +122,7 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
         <Box
           sx={{
             width: '100%',
-            maxWidth: 600,
-            height: 350,
+            height: 700,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -162,8 +161,7 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
             sx={{
               position: 'relative',
               width: '100%',
-              maxWidth: 600,
-              height: 350,
+              height: 700,
               borderRadius: 3,
               bgcolor: '#020617',
               boxShadow: 'inset 0 0 0 1px rgba(148,163,184,0.4)',
@@ -199,8 +197,7 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
           data-testid="game-over"
           sx={{
             width: '100%',
-            maxWidth: 600,
-            height: 350,
+            height: 700,
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
