@@ -91,7 +91,7 @@ jobs:
       - name: Build project
         run: npm run build
         env:
-          VITE_LIVEBLOCKS_API_KEY: ${{ secrets.VITE_LIVEBLOCKS_API_KEY }}
+          VITE_LIVEBLOCKS_PUBLIC_KEY: ${{ secrets.VITE_LIVEBLOCKS_PUBLIC_KEY }}
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

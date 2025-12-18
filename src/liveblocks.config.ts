@@ -7,10 +7,21 @@ const getPublicApiKey = () => {
     hasViteApiKey: !!import.meta.env.VITE_LIVEBLOCKS_API_KEY,
     hasVitePublicKey: !!import.meta.env.VITE_LIVEBLOCKS_PUBLIC_KEY,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    hasProcessEnv: typeof process !== 'undefined' && !!(process as any).env?.VITE_LIVEBLOCKS_PUBLIC_KEY,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     hasWindowKey: typeof window !== 'undefined' && !!(window as any).LIVEBLOCKS_PUBLIC_KEY,
     allEnvKeys: Object.keys(import.meta.env).filter(k => k.includes('LIVEBLOCKS')),
   });
   
+ // Try process.env (for Node.js/SSR environments)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if (typeof process !== 'undefined' && (process as any).env?.VITE_LIVEBLOCKS_PUBLIC_KEY) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const key = (process as any).env.VITE_LIVEBLOCKS_PUBLIC_KEY;
+    console.log('[Liveblocks Debug] Using process.env.VITE_LIVEBLOCKS_PUBLIC_KEY:', key.substring(0, 10) + '...');
+    return key;
+  }
+
   // Try environment variable first (for local development)
   if (import.meta.env.VITE_LIVEBLOCKS_API_KEY) {
     const key = import.meta.env.VITE_LIVEBLOCKS_API_KEY;
