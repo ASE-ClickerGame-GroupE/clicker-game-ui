@@ -6,6 +6,7 @@ const getPublicApiKey = () => {
   console.log('[Liveblocks Debug] Environment check:', {
     hasViteApiKey: !!import.meta.env.VITE_LIVEBLOCKS_API_KEY,
     hasVitePublicKey: !!import.meta.env.VITE_LIVEBLOCKS_PUBLIC_KEY,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     hasWindowKey: typeof window !== 'undefined' && !!(window as any).LIVEBLOCKS_PUBLIC_KEY,
     allEnvKeys: Object.keys(import.meta.env).filter(k => k.includes('LIVEBLOCKS')),
   });
@@ -25,7 +26,9 @@ const getPublicApiKey = () => {
   }
   
   // Fallback to window object for production (GitHub Pages)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if (typeof window !== 'undefined' && (window as any).LIVEBLOCKS_PUBLIC_KEY) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const key = (window as any).LIVEBLOCKS_PUBLIC_KEY;
     console.log('[Liveblocks Debug] Using window.LIVEBLOCKS_PUBLIC_KEY:', key.substring(0, 10) + '...');
     return key;
