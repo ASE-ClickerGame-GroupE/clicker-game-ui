@@ -3,22 +3,43 @@ import { createRoomContext } from "@liveblocks/react";
 
 // Get public API key from environment variable or window object (for GitHub Pages)
 const getPublicApiKey = () => {
+  console.log('[Liveblocks Debug] Environment check:', {
+    hasViteApiKey: !!import.meta.env.VITE_LIVEBLOCKS_API_KEY,
+    hasVitePublicKey: !!import.meta.env.VITE_LIVEBLOCKS_PUBLIC_KEY,
+    hasWindowKey: typeof window !== 'undefined' && !!(window as any).LIVEBLOCKS_PUBLIC_KEY,
+    allEnvKeys: Object.keys(import.meta.env).filter(k => k.includes('LIVEBLOCKS')),
+  });
+  
   // Try environment variable first (for local development)
   if (import.meta.env.VITE_LIVEBLOCKS_API_KEY) {
-    return import.meta.env.VITE_LIVEBLOCKS_API_KEY;
+    const key = import.meta.env.VITE_LIVEBLOCKS_API_KEY;
+    console.log('[Liveblocks Debug] Using VITE_LIVEBLOCKS_API_KEY:', key.substring(0, 10) + '...');
+    return key;
+  }
+  
+  // Try public key for production
+  if (import.meta.env.VITE_LIVEBLOCKS_PUBLIC_KEY) {
+    const key = import.meta.env.VITE_LIVEBLOCKS_PUBLIC_KEY;
+    console.log('[Liveblocks Debug] Using VITE_LIVEBLOCKS_PUBLIC_KEY:', key.substring(0, 10) + '...');
+    return key;
   }
   
   // Fallback to window object for production (GitHub Pages)
-  if (typeof window !== 'undefined' && 'LIVEBLOCKS_PUBLIC_KEY' in window) {
-    return window.LIVEBLOCKS_PUBLIC_KEY;
+  if (typeof window !== 'undefined' && (window as any).LIVEBLOCKS_PUBLIC_KEY) {
+    const key = (window as any).LIVEBLOCKS_PUBLIC_KEY;
+    console.log('[Liveblocks Debug] Using window.LIVEBLOCKS_PUBLIC_KEY:', key.substring(0, 10) + '...');
+    return key;
   }
   
-  // Default key for GitHub Pages deployment
-  return import.meta.env.VITE_LIVEBLOCKS_PUBLIC_KEY || "";
+  console.error('[Liveblocks Debug] No API key found!');
+  return "";
 };
 
+const publicApiKey = getPublicApiKey();
+console.log('[Liveblocks Debug] Final key length:', publicApiKey.length, 'starts with pk_:', publicApiKey.startsWith('pk_'));
+
 const client = createClient({
-  publicApiKey: getPublicApiKey(),
+  publicApiKey,
 });
 
 // Declare Liveblocks types for the application
