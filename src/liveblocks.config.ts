@@ -3,8 +3,6 @@ import { createRoomContext } from "@liveblocks/react";
 
 // Get public API key from environment variable or window object (for GitHub Pages)
 const getPublicApiKey = () => {
-  console.log(JSON.stringify(import.meta.env), 'import meta.env contents');
-  console.log(JSON.stringify(process.env), 'import process.env contents');
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if (typeof process !== 'undefined' && (process as any).env?.VITE_LIVEBLOCKS_PUBLIC_KEY) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
