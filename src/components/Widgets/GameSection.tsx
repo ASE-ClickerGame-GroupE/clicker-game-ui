@@ -5,8 +5,13 @@ import { useFinishGame } from '../../hooks/useFinishGame/useFinishGame.ts'
 import { useStartGame } from '../../hooks/useStartGame/useStartGame.ts'
 import type { IStartGameBody } from '../../api/start-game/start-game.ts'
 import { useUserId } from '../../hooks/useUserId/useUserId.ts'
+import {
+  DEFAULT_GAME_DURATION_SECONDS,
+  GAME_DURATION_OPTIONS,
+  formatDurationLabel,
+  type GameDurationSeconds,
+} from '../../utils/gameSettings.ts'
 
-const GAME_DURATION_SECONDS = 5
 
 export type GameSectionProps = {
   onGameEnd: (score: number) => void
@@ -30,16 +35,23 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [isGameOver, setIsGameOver] = useState(false)
   const [score, setScore] = useState(0)
-  const [timeLeft, setTimeLeft] = useState(GAME_DURATION_SECONDS)
+  const [showSettings, setShowSettings] = useState(true)
+  const [selectedDuration, setSelectedDuration] = useState<GameDurationSeconds>(
+    DEFAULT_GAME_DURATION_SECONDS
+  )
+  const [timeLeft, setTimeLeft] = useState<number>(
+    DEFAULT_GAME_DURATION_SECONDS
+  )
   const [targetPosition, setTargetPosition] = useState<TargetPosition | null>(
     null
   )
 
   const startGame = () => {
+    setShowSettings(false)
     setIsPlaying(true)
     setIsGameOver(false)
     setScore(0)
-    setTimeLeft(GAME_DURATION_SECONDS)
+    setTimeLeft(selectedDuration)
     setTargetPosition(getRandomPosition())
 
     const body: IStartGameBody = { user_id: storedUserId }
@@ -118,16 +130,37 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
         Aim Clicker
       </Typography>
 
-      {!isPlaying && !isGameOver && (
+      {showSettings && !isPlaying && (
         <Box
           sx={{
             width: '100%',
             height: 700,
             display: 'flex',
+            flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
           }}
         >
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="subtitle1" sx={{ mb: 1 }}>
+              Game Duration
+            </Typography>
+
+            <Stack direction="row" spacing={1} sx={{ justifyContent: 'center', flexWrap: 'wrap' }}>
+              {GAME_DURATION_OPTIONS.map((sec) => (
+                <Button
+                  key={sec}
+                  size="small"
+                  variant={selectedDuration === sec ? 'contained' : 'outlined'}
+                  onClick={() => setSelectedDuration(sec)}
+                  data-testid={`duration-${sec}s`}
+                  sx={{ borderRadius: 999 }}
+                >
+                  {formatDurationLabel(sec)}
+                </Button>
+              ))}
+            </Stack>
+          </Box>
           <Button
             data-testid="play-button"
             variant="contained"
@@ -214,6 +247,17 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
             onClick={startGame}
           >
             PLAY AGAIN
+          </Button>
+          <Button
+            variant="outlined"
+            sx={{ borderRadius: 999, px: { xs: 3, sm: 4 } }}
+            onClick={() => {
+              setIsGameOver(false)
+              setShowSettings(true)
+            }}
+            data-testid="change-settings-button"
+          >
+            CHANGE SETTINGS
           </Button>
         </Box>
       )}
