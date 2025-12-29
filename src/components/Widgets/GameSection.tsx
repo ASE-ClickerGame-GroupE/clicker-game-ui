@@ -130,7 +130,7 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
         Aim Clicker
       </Typography>
 
-      {showSettings && !isPlaying && (
+      {showSettings && !isPlaying && !isGameOver && (
         <Box
           sx={{
             width: '100%',
