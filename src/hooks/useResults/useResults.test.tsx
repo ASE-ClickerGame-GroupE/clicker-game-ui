@@ -5,6 +5,17 @@ import type { StoredResult } from '../../storage/resultsStorage.ts'
 
 jest.mock('../useStoredResults/useStoredResults.tsx')
 jest.mock('../useFetchResults/useFetchResults.ts')
+jest.mock('../useAuth/useAuth.tsx', () => ({
+  useAuth: () => ({
+    token: null,
+    isAuthenticated: false,
+    user: null,
+    userId: null,
+    isLoadingUser: false,
+    login: jest.fn(),
+    logout: jest.fn(),
+  }),
+}))
 jest.mock('@tanstack/react-query', () => {
   const actual = jest.requireActual(
     '@tanstack/react-query'
@@ -38,7 +49,7 @@ const mockedUseStoredResults = useStoredResults as jest.MockedFunction<
   typeof useStoredResults
 >
 const mockedUseFetchResults = useFetchResults as unknown as jest.MockedFunction<
-  () => UseFetchResultsReturn
+  (authenticatedUserId?: string | null, localStorageUserId?: string) => UseFetchResultsReturn
 >
 const mockedUseMutation = useMutation as unknown as jest.MockedFunction<
   () => UseMutationReturn

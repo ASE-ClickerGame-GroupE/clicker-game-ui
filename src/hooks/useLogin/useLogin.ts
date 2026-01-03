@@ -10,7 +10,7 @@ export function useLogin() {
       mutationKey: ['login'],
       mutationFn: ({ email, password }) => loginRequest(email, password),
       onSuccess: (data: LoginResponse) => {
-        login(data.token)
+        login(data.access_token)
       },
     }
   )

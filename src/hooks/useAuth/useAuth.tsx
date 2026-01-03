@@ -1,10 +1,14 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useMemo, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import Cookies from 'js-cookie'
+import { getMeRequest, type UserResponse } from '../../api/auth/auth'
 
 type AuthContextValue = {
   token: string | null
   isAuthenticated: boolean
+  user: UserResponse | null
+  userId: string | null
+  isLoadingUser: boolean
   login: (token: string) => void
   logout: () => void
 }
@@ -20,6 +24,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return null
     }
   })
+  const [user, setUser] = useState<UserResponse | null>(null)
+  const [isLoadingUser, setIsLoadingUser] = useState(false)
+
+  // Fetch user data when token exists
+  useEffect(() => {
+    if (!token) {
+      setUser(null)
+      return
+    }
+
+    const fetchUser = async () => {
+      setIsLoadingUser(true)
+      try {
+        const userData = await getMeRequest()
+        setUser(userData)
+      } catch (error) {
+        console.error('Failed to fetch user data:', error)
+        // Token might be invalid, clear it
+        setToken(null)
+        setUser(null)
+        try {
+          Cookies.remove('token', { path: '/' })
+        } catch (e) {
+          void e
+        }
+      } finally {
+        setIsLoadingUser(false)
+      }
+    }
+
+    void fetchUser()
+  }, [token])
 
   const login = (t: string) => {
     setToken(t)
@@ -32,6 +68,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = () => {
     setToken(null)
+    setUser(null)
     try {
       Cookies.remove('token', { path: '/' })
     } catch (e) {
@@ -40,8 +77,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 
   const value = useMemo(
-    () => ({ token, isAuthenticated: !!token, login, logout }),
-    [token]
+    () => ({
+      token,
+      isAuthenticated: !!token,
+      user,
+      userId: user?.user_id || null,
+      isLoadingUser,
+      login,
+      logout
+    }),
+    [token, user, isLoadingUser]
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
