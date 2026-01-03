@@ -137,7 +137,11 @@ describe('GameSection', () => {
 
     const [finishBody] = mockFinishGameMutate.mock.calls[0]
     expect(finishBody.session_id).toBe('session-123')
-    expect(finishBody.scores).toBe(1)
+    expect(typeof finishBody.scores).toBe('object')
+    expect(Object.keys(finishBody.scores).length).toBeGreaterThan(0)
+    // Check that scores contains a user_id key with score value 1
+    const userIds = Object.keys(finishBody.scores)
+    expect(finishBody.scores[userIds[0]]).toBe(1)
     expect(typeof finishBody.finished_at).toBe('number')
   })
 

@@ -160,7 +160,7 @@ export const MultiplayerGameSection: React.FC<MultiplayerGameSectionProps> = ({
     const currentSessionId = sessionIdRef.current || sessionId;
     if (currentSessionId) {
       const finishBody = {
-        scores: myScore,
+        scores: playerScoresMap, // Send all player scores as object
         session_id: currentSessionId,
         finished_at: Date.now(),
       };
@@ -179,6 +179,7 @@ export const MultiplayerGameSection: React.FC<MultiplayerGameSectionProps> = ({
     endGameMutation,
     finishGameMutate,
     onGameEnd,
+    playerScoresMap,
   ]);
 
   // Get list of all players

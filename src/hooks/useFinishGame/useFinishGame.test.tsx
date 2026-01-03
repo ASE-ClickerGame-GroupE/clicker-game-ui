@@ -27,7 +27,10 @@ describe('useFinishGame', () => {
 
     const body: IFinishGameBody = {
       session_id: 'session-123',
-      scores: 10,
+      scores: {
+        'user-123': 10,
+        'user-456': 5,
+      },
       finished_at: 1712345678900,
     }
 
