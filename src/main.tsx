@@ -4,7 +4,9 @@ import { BrowserRouter, Route, Routes } from 'react-router'
 import HomePage from './pages/Home/Home.page.tsx'
 import LoginPage from './pages/Login/Login.page.tsx'
 import RegisterPage from './pages/Register/Register.page.tsx'
+import LeaderboardsPage from './pages/Leaderboards/Leaderboards.page.tsx'
 import ProtectedRoute from './components/Widgets/ProtectedRoute.tsx'
+import { Header } from './components/Header/Header.tsx'
 import { AuthProvider } from './hooks/useAuth/useAuth.tsx'
 import {
   createTheme,
@@ -70,6 +72,7 @@ try {
         <QueryClientProvider client={queryClient}>
           <BrowserRouter basename={routerBasename}>
             <AuthProvider>
+              <Header />
               <Routes>
                 <Route
                   path="/"
@@ -81,6 +84,7 @@ try {
                 />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
+                <Route path="/leaderboards" element={<LeaderboardsPage />} />
               </Routes>
             </AuthProvider>
           </BrowserRouter>
