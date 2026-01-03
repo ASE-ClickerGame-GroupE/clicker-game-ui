@@ -62,7 +62,6 @@ type BestSingleRunMeResponse = {
   } | null
 }
 
-// ✅ jest.Mock yerine MockedFunction kullandık (setup farklarından etkilenmez)
 const mockedApi = api as unknown as {
   leaderboard: {
     fetchTotalScoreLeaderboard: jest.MockedFunction<
