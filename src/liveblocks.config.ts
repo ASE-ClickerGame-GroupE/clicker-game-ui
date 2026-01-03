@@ -44,6 +44,7 @@ declare global {
     Presence: {
       cursor: { xPercent: number; yPercent: number } | null;
       userName: string;
+      userId: string;
       color: string;
     };
 

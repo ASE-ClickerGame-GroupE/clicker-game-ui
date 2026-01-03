@@ -49,6 +49,7 @@ export const LiveblocksRoom: React.FC<LiveblocksRoomProps> = ({
       initialPresence={{
         cursor: null,
         userName,
+        userId,
         color: userColor,
       }}
       initialStorage={() => ({

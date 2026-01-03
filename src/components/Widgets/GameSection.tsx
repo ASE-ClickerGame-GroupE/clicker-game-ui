@@ -104,7 +104,9 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
       }
 
       const finishBody = {
-        scores: score,
+        scores: {
+          [userId]: score,
+        },
         session_id: currentSessionId,
         finished_at: Date.now(),
       }
@@ -114,7 +116,7 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
         onSettled: () => onGameEnd(score),
       })
     }
-  }, [isPlaying, timeLeft, score, onGameEnd, sessionId, finishGameMutate])
+  }, [isPlaying, timeLeft, score, onGameEnd, sessionId, finishGameMutate, userId])
 
   return (
     <Box

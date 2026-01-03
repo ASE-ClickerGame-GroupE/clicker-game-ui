@@ -160,7 +160,7 @@ export const MultiplayerGameSection: React.FC<MultiplayerGameSectionProps> = ({
     const currentSessionId = sessionIdRef.current || sessionId;
     if (currentSessionId) {
       const finishBody = {
-        scores: myScore,
+        scores: playerScoresMap, // Send all player scores as object
         session_id: currentSessionId,
         finished_at: Date.now(),
       };
@@ -179,16 +179,23 @@ export const MultiplayerGameSection: React.FC<MultiplayerGameSectionProps> = ({
     endGameMutation,
     finishGameMutate,
     onGameEnd,
+    playerScoresMap,
   ]);
 
-  // Get list of all players
+  // Get list of all players with their userIds
   const allPlayers = [
     ...(self
-      ? [{ id: self.connectionId, name: self.presence.userName, isMe: true }]
+      ? [{
+          id: self.connectionId,
+          name: self.presence.userName,
+          userId: self.presence.userId,
+          isMe: true
+        }]
       : []),
     ...others.map((other) => ({
       id: other.connectionId,
       name: other.presence.userName,
+      userId: other.presence.userId,
       isMe: false,
     })),
   ];
@@ -320,7 +327,7 @@ export const MultiplayerGameSection: React.FC<MultiplayerGameSectionProps> = ({
           {/* All players' scores */}
           <Stack direction="row" spacing={2} flexWrap="wrap" justifyContent="center">
             {allPlayers.map((player) => {
-              const score = playerScoresMap?.[player.name] ?? 0;
+              const score = playerScoresMap?.[player.userId] ?? 0;
               return (
                 <Typography key={player.id} variant="body2" color="text.secondary">
                   {player.name}: {score}
@@ -388,7 +395,7 @@ export const MultiplayerGameSection: React.FC<MultiplayerGameSectionProps> = ({
               Final Scores:
             </Typography>
             {allPlayers.map((player) => {
-              const score = playerScoresMap?.[player.name] ?? 0;
+              const score = playerScoresMap?.[player.userId] ?? 0;
               return (
                 <Typography key={player.id} variant="body1">
                   {player.name}: {score}
