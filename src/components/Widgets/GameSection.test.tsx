@@ -1,6 +1,17 @@
 jest.mock('../../assets/target.png', () => 'mock-target-image')
 jest.mock('../../hooks/useStartGame/useStartGame.ts')
 jest.mock('../../hooks/useFinishGame/useFinishGame.ts')
+jest.mock('../../hooks/useAuth/useAuth.tsx', () => ({
+  useAuth: () => ({
+    token: null,
+    isAuthenticated: false,
+    user: null,
+    userId: null,
+    isLoadingUser: false,
+    login: jest.fn(),
+    logout: jest.fn(),
+  }),
+}))
 
 import React from 'react'
 import { render, screen, fireEvent, act } from '@testing-library/react'

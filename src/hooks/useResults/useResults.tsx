@@ -8,6 +8,7 @@ import {
 import { addResult as addResultApi } from '../../api/add-results/add-results.ts'
 import type { StoredResult } from '../../storage/resultsStorage.ts'
 import { useUserId } from '../useUserId/useUserId.ts'
+import { useAuth } from '../useAuth/useAuth.tsx'
 
 type UseResultsReturn = {
   results: StoredResult[]
@@ -19,7 +20,8 @@ type UseResultsReturn = {
 
 export const useResults = (isAuthenticated: boolean): UseResultsReturn => {
   const queryClient = useQueryClient()
-  const userId = useUserId()
+  const localStorageUserId = useUserId()
+  const { userId: authenticatedUserId } = useAuth()
 
   const { results: storedResults, addResult: addStoredResult } =
     useStoredResults()
@@ -29,7 +31,7 @@ export const useResults = (isAuthenticated: boolean): UseResultsReturn => {
     isFetching,
     error,
     refetch,
-  } = useFetchResults(userId)
+  } = useFetchResults(authenticatedUserId, localStorageUserId)
 
   const addResultMutation = useMutation({
     mutationKey: ['addResult'],

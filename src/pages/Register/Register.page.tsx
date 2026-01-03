@@ -9,10 +9,12 @@ const validatePassword = (v: string) => v.length >= 6 && v.length <= 24
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate()
   const { mutate, isPending: loading, error } = useRegister()
+  const [login, setLogin] = React.useState('')
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
   const [repeat, setRepeat] = React.useState('')
   const [touched, setTouched] = React.useState({
+    login: false,
     email: false,
     password: false,
     repeat: false,
@@ -20,15 +22,16 @@ const RegisterPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setTouched({ email: true, password: true, repeat: true })
+    setTouched({ login: true, email: true, password: true, repeat: true })
     if (
+      !login ||
       !validateEmail(email) ||
       !validatePassword(password) ||
       password !== repeat
     )
       return
     try {
-      mutate({ email, password })
+      mutate({ login, email, password })
       navigate('/login')
     } catch (e) {
       void e
@@ -48,6 +51,18 @@ const RegisterPage: React.FC = () => {
         <Typography variant="h4" mb={2}>
           Register
         </Typography>
+        <TextField
+          label="Username"
+          fullWidth
+          margin="normal"
+          value={login}
+          onChange={(e) => setLogin(e.target.value)}
+          onBlur={() => setTouched((s) => ({ ...s, login: true }))}
+          error={touched.login && !login}
+          helperText={
+            touched.login && !login ? 'Username is required' : ''
+          }
+        />
         <TextField
           label="Email"
           fullWidth

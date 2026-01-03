@@ -2,10 +2,11 @@ import React, { useMemo } from 'react';
 import type { ReactNode } from 'react';
 import { RoomProvider } from '../../liveblocks.config';
 import { useUserId } from '../../hooks/useUserId/useUserId';
+import { useAuth } from '../../hooks/useAuth/useAuth';
 import { ClientSideSuspense } from '@liveblocks/react';
 import { LiveObject, LiveMap } from '@liveblocks/client';
 import { Box, CircularProgress } from '@mui/material';
-import { generateAnimalName } from '../../utils/animalNames';
+import { getDisplayName } from '../../utils/displayName';
 
 type LiveblocksRoomProps = {
   roomId: string;
@@ -34,12 +35,13 @@ export const LiveblocksRoom: React.FC<LiveblocksRoomProps> = ({
   children,
 }) => {
   const userId = useUserId();
+  const { user } = useAuth();
 
   // Generate a random color for this user (memoized so it doesn't change)
   const userColor = useMemo(() => getRandomColor(), []);
 
-  // Generate a funny animal name from user ID
-  const userName = useMemo(() => generateAnimalName(userId), [userId]);
+  // Get display name: real username for authenticated users, animal name for others
+  const userName = useMemo(() => getDisplayName(userId, user), [userId, user]);
 
   return (
     <RoomProvider

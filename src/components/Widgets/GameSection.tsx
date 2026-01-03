@@ -5,6 +5,7 @@ import { useFinishGame } from '../../hooks/useFinishGame/useFinishGame.ts'
 import { useStartGame } from '../../hooks/useStartGame/useStartGame.ts'
 import type { IStartGameBody } from '../../api/start-game/start-game.ts'
 import { useUserId } from '../../hooks/useUserId/useUserId.ts'
+import { useAuth } from '../../hooks/useAuth/useAuth.tsx'
 import {
   DEFAULT_GAME_DURATION_SECONDS,
   GAME_DURATION_OPTIONS,
@@ -26,7 +27,12 @@ const getRandomPosition = (): TargetPosition => {
 }
 
 export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
-  const storedUserId = useUserId()
+  const localStorageUserId = useUserId()
+  const { userId: authenticatedUserId } = useAuth()
+
+  // Use authenticated userId if available, otherwise use localStorage userId
+  const userId = authenticatedUserId || localStorageUserId
+
   const { mutate: finishGameMutate } = useFinishGame()
   const { mutate: startGameMutate } = useStartGame()
 
@@ -54,7 +60,7 @@ export const GameSection: React.FC<GameSectionProps> = ({ onGameEnd }) => {
     setTimeLeft(selectedDuration)
     setTargetPosition(getRandomPosition())
 
-    const body: IStartGameBody = { user_id: storedUserId }
+    const body: IStartGameBody = { user_id: userId }
 
     startGameMutate(body, {
       onSuccess: (data) => {

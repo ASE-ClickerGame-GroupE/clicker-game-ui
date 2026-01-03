@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router'
 import HomePage from './pages/Home/Home.page.tsx'
 import LoginPage from './pages/Login/Login.page.tsx'
 import RegisterPage from './pages/Register/Register.page.tsx'
+import ProtectedRoute from './components/Widgets/ProtectedRoute.tsx'
 import { AuthProvider } from './hooks/useAuth/useAuth.tsx'
 import {
   createTheme,
@@ -73,10 +74,9 @@ try {
                 <Route
                   path="/"
                   element={
-                    <HomePage />
-                    // <ProtectedRoute>
-                    //   <HomePage />
-                    // </ProtectedRoute>
+                    <ProtectedRoute>
+                      <HomePage />
+                    </ProtectedRoute>
                   }
                 />
                 <Route path="/login" element={<LoginPage />} />
