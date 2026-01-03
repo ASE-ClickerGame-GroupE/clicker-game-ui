@@ -1,4 +1,5 @@
 import React from 'react'
+import LeaderboardCard from '../../components/Widgets/LeaderboardCard.tsx'
 import { Box, Container, Typography } from '@mui/material'
 
 const LeaderboardsPage: React.FC = () => {
@@ -21,10 +22,7 @@ const LeaderboardsPage: React.FC = () => {
         >
           Leaderboards
         </Typography>
-
-        <Typography textAlign="center" color="text.secondary" variant="h6">
-          Coming Soon...
-        </Typography>
+        <LeaderboardCard />
       </Container>
     </Box>
   )
