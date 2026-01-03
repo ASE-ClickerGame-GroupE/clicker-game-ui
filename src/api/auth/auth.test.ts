@@ -26,7 +26,6 @@ jest.mock('axios', () => {
 })
 
 import { loginRequest, registerRequest } from './auth.ts'
-import axios from 'axios'
 
 describe('api auth wrappers', () => {
   beforeEach(() => {
@@ -39,7 +38,7 @@ describe('api auth wrappers', () => {
 
   it('loginRequest returns access_token on success', async () => {
     mockAxiosPost.mockResolvedValue({
-      data: { access_token: 'abc123', token_type: 'bearer' }
+      data: { access_token: 'abc123', token_type: 'bearer' },
     })
 
     const res = await loginRequest('username', 'password')
@@ -54,17 +53,21 @@ describe('api auth wrappers', () => {
         user_id: 'user-123',
         loging: 'testuser',
         email: 'test@example.com',
-        created_at: 1234567890
-      }
+        created_at: 1234567890,
+      },
     })
 
-    const res = await registerRequest('testuser', 'test@example.com', 'password')
+    const res = await registerRequest(
+      'testuser',
+      'test@example.com',
+      'password'
+    )
 
     expect(res).toEqual({
       user_id: 'user-123',
       loging: 'testuser',
       email: 'test@example.com',
-      created_at: 1234567890
+      created_at: 1234567890,
     })
     expect(mockAuthApiPost).toHaveBeenCalled()
   })
