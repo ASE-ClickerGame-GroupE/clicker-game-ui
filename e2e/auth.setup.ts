@@ -67,22 +67,17 @@ test.describe('Authentication', () => {
     await page.getByLabel('Username').fill(TEST_USER.username)
     await page.getByLabel('Password').fill(TEST_USER.password)
 
-    // Login request'i bekleyelim (endpoint adını bilmiyorsak networkidle da olur)
     await Promise.all([
       page.getByRole('button', { name: /sign in/i }).click(),
       page.waitForLoadState('networkidle'),
     ])
 
-    // 1) Login sayfasından çıkmış mı?
     await expect(page).not.toHaveURL(/\/login/, { timeout: 15_000 })
 
-    // 2) Token cookie var mı? (asıl kritik doğrulama)
     const cookies = await context.cookies()
     const tokenCookie = cookies.find((c) => c.name === 'token')
     expect(tokenCookie?.value).toBeTruthy()
 
-    // İstersen UI'da "Logout" / username gibi bir şey de kontrol edebilirsin
-    // await expect(page.getByText(/logout/i)).toBeVisible({ timeout: 15_000 })
 
     await context.storageState({ path: 'e2e/storageState.json' })
   })
