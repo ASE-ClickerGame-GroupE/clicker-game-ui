@@ -2,6 +2,7 @@ import type { FullConfig } from '@playwright/test'
 import { chromium } from '@playwright/test'
 import { TEST_USER, BASE_URL } from './test-credentials'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default async function globalSetup(_config: FullConfig) {
   const browser = await chromium.launch()
   const page = await browser.newPage()
@@ -13,17 +14,24 @@ export default async function globalSetup(_config: FullConfig) {
     try {
       await page.getByLabel('Username').fill(TEST_USER.username)
     } catch {
-      await page.fill('input[name="username"]', TEST_USER.username).catch(() => {})
+      await page
+        .fill('input[name="username"]', TEST_USER.username)
+        .catch(() => {})
     }
 
     try {
       await page.getByLabel('Password').fill(TEST_USER.password)
     } catch {
-      await page.fill('input[name="password"]', TEST_USER.password).catch(() => {})
+      await page
+        .fill('input[name="password"]', TEST_USER.password)
+        .catch(() => {})
     }
 
     // Click sign in and wait for navigation or profile button
-    await page.getByRole('button', { name: /sign in/i }).click().catch(() => {})
+    await page
+      .getByRole('button', { name: /sign in/i })
+      .click()
+      .catch(() => {})
 
     // Wait for either profile button or redirect to home
     await page.waitForTimeout(2000)
@@ -38,4 +46,3 @@ export default async function globalSetup(_config: FullConfig) {
     await browser.close()
   }
 }
-

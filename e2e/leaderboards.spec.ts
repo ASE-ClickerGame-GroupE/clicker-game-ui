@@ -85,9 +85,6 @@ test.describe('Leaderboards', () => {
   test('should show loading state initially', async ({ page }) => {
     await page.goto('/leaderboards')
 
-    // Should show loading text briefly
-    const loadingText = page.getByText(/loading/i)
-    // Loading might be too fast, so we just check the page loads
     await expect(
       page.getByRole('heading', { name: /leaderboards/i })
     ).toBeVisible()

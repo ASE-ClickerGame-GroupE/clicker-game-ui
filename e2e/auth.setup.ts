@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 import { TEST_USER, BASE_URL } from './test-credentials'
 
 test.describe('Authentication', () => {
-  test.beforeEach(async ({ page, context }) => {
+  test.beforeEach(async ({ page }) => {
     await page.goto(BASE_URL)
   })
 

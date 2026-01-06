@@ -1,8 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { BASE_URL } from './test-credentials'
 
-const USER_ID = 'cadeb610-588c-432d-9ef4-62eddcd20ec9'
-
 test.describe('Game Results', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(BASE_URL)
