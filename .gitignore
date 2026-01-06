@@ -35,3 +35,9 @@ coverage
 /playwright/.cache/
 /playwright/.auth/
 .env
+
+# SonarQube
+.scannerwork/
+eslint-report.json
+e2e/storageState.json
+analysis-summary.json
