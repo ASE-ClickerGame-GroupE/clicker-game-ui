@@ -31,8 +31,16 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
+      name: 'setup',
+      testMatch: '**/*.setup.ts',
       use: { ...devices['Desktop Chrome'] },
+      fullyParallel: false,
+      retries: 0,
+    },
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'], storageState: 'e2e/storageState.json' },
+      dependencies: ['setup'],
     },
   ],
 })
