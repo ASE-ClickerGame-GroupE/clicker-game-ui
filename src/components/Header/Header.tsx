@@ -88,6 +88,7 @@ export const Header: React.FC = () => {
                 color="inherit"
                 onClick={handleProfileClick}
                 aria-label="profile"
+                data-testid="profile-button"
                 sx={{
                   '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.1)' },
                 }}
@@ -139,6 +140,7 @@ export const Header: React.FC = () => {
                     color="error"
                     fullWidth
                     onClick={handleLogout}
+                    data-testid="logout-button"
                     sx={{ mt: 2 }}
                   >
                     Logout
@@ -153,6 +155,7 @@ export const Header: React.FC = () => {
                 onClick={() => navigate('/login')}
                 aria-label="login"
                 title="Login"
+                data-testid="login-icon"
                 sx={{
                   '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.1)' },
                 }}
@@ -164,6 +167,7 @@ export const Header: React.FC = () => {
                 onClick={() => navigate('/register')}
                 aria-label="register"
                 title="Register"
+                data-testid="register-icon"
                 sx={{
                   '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.1)' },
                 }}
