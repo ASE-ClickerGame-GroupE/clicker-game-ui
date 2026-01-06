@@ -37,4 +37,36 @@ describe('ResultsSection', () => {
     expect(screen.getByText(/hits: 5/i)).toBeInTheDocument()
     expect(screen.getByText(/hits: 8/i)).toBeInTheDocument()
   })
+
+  test('displays "Singleplayer" for games with 1 player', () => {
+    const results: StoredResult[] = [
+      makeResult({ id: '1', score: 5, playerCount: 1 }),
+    ]
+
+    render(<ResultsSection results={results} />)
+
+    expect(screen.getByText('Singleplayer')).toBeInTheDocument()
+  })
+
+  test('displays "Multiplayer" for games with more than 1 player', () => {
+    const results: StoredResult[] = [
+      makeResult({ id: '1', score: 5, playerCount: 3 }),
+      makeResult({ id: '2', score: 8, playerCount: 2 }),
+    ]
+
+    render(<ResultsSection results={results} />)
+
+    const multiplayerElements = screen.getAllByText('Multiplayer')
+    expect(multiplayerElements).toHaveLength(2)
+  })
+
+  test('defaults to "Singleplayer" when playerCount is undefined', () => {
+    const results: StoredResult[] = [
+      makeResult({ id: '1', score: 5, playerCount: undefined }),
+    ]
+
+    render(<ResultsSection results={results} />)
+
+    expect(screen.getByText('Singleplayer')).toBeInTheDocument()
+  })
 })

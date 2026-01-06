@@ -49,11 +49,23 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({ results }) => {
                 px: { xs: 1.5, sm: 2 },
                 borderRadius: 2,
                 bgcolor: 'rgba(15,23,42,0.95)',
+                gap: 2,
               }}
             >
-              <Typography fontWeight={500}>{index + 1}.</Typography>
-              <Typography>Hits: {result.score}</Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography fontWeight={500} sx={{ minWidth: '30px' }}>
+                {index + 1}.
+              </Typography>
+              <Typography sx={{ minWidth: '80px' }}>Hits: {result.score}</Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  minWidth: '100px',
+                  color: result.playerCount && result.playerCount > 1 ? 'primary.main' : 'success.main'
+                }}
+              >
+                {result.playerCount && result.playerCount > 1 ? 'Multiplayer' : 'Singleplayer'}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ minWidth: '150px' }}>
                 {new Date(result.finishedAt).toLocaleString()}
               </Typography>
             </Box>
