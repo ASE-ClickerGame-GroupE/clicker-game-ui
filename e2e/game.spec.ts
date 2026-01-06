@@ -31,8 +31,9 @@ test.skip('user plays one round, game ends with score 1 and result is persisted'
 }) => {
   // In-memory mock backend results for this test
   const backendResults: unknown[] = []
+  const mockUserId = 'test-user-id'
 
-  await page.route('**/game?user_id', async (route) => {
+  await page.route('**/game?user_id*', async (route) => {
     const request = route.request()
 
     if (request.method() === 'GET') {
@@ -50,7 +51,7 @@ test.skip('user plays one round, game ends with score 1 and result is persisted'
       backendResults.unshift({
         id: 'new-id',
         finished_at: Date.now(),
-        scores: body.score,
+        scores: body.scores || { [mockUserId]: body.score },
       })
 
       await route.fulfill({

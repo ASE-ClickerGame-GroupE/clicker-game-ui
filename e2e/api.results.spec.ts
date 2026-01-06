@@ -1,10 +1,11 @@
 import { test, expect } from '@playwright/test'
 
 const APP_URL = 'http://localhost:5173/'
+const mockUserId = 'test-user-id'
 
 const backendResults = [
-  { id: '1', finished_at: 1765124340664, scores: 10 },
-  { id: '2', finished_at: 1765124340664, scores: 2 },
+  { id: '1', finished_at: 1765124340664, scores: { [mockUserId]: 10 } },
+  { id: '2', finished_at: 1765124340664, scores: { [mockUserId]: 2 } },
 ]
 
 test.skip('authenticated user uses backend results and sends new score', async ({
@@ -19,7 +20,7 @@ test.skip('authenticated user uses backend results and sends new score', async (
     },
   ])
 
-  await page.route('**/game?user_id', async (route) => {
+  await page.route('**/game?user_id*', async (route) => {
     const request = route.request()
 
     if (request.method() === 'GET') {
@@ -37,7 +38,7 @@ test.skip('authenticated user uses backend results and sends new score', async (
       backendResults.unshift({
         id: 'new-id',
         finished_at: Date.now(),
-        scores: body.score,
+        scores: body.scores || { [mockUserId]: body.score },
       })
 
       await route.fulfill({

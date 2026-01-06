@@ -2,6 +2,7 @@ export type StoredResult = {
   id: string
   score: number
   finishedAt: number
+  playerCount?: number // Number of players in the game (1 for single-player, >1 for multiplayer)
 }
 
 const STORAGE_KEY = 'aim-clicker-results'
@@ -39,6 +40,7 @@ export const saveResult = (score: number): StoredResult[] => {
         : `${Date.now()}-${Math.random()}`,
     score,
     finishedAt: Date.now(),
+    playerCount: 1, // Local storage saves are always single-player
   }
 
   const next = [newResult, ...previous].sort((a, b) => b.score - a.score)
