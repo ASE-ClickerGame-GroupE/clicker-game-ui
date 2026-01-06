@@ -3,5 +3,4 @@ export const TEST_USER = {
   password: process.env.TEST_USER_PASSWORD || 'qweqwe123123',
 }
 
-export const BASE_URL = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:5173'
-
+export const BASE_URL = 'http://localhost:5173'
