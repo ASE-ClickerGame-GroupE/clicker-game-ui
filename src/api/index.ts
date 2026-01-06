@@ -1,31 +1,30 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import { fetchTotalScoreLeaderboard } from './leaderboard/fetch-total-score'
-import { fetchBestSingleRunLeaderboard } from './leaderboard/fetch-best-single-run'
-import { fetchTotalScoreMe } from './leaderboard/fetch-total-score-me'
-import { fetchBestSingleRunMe } from './leaderboard/fetch-best-single-run-me'
+import * as leaderboard from './leaderboard'
 
 export const api = {
   gameApi: axios.create({
     baseURL: 'https://clicker-game-game-service-stage.onrender.com',
   }),
-  leaderboard: {
-    fetchTotalScoreLeaderboard,
-    fetchBestSingleRunLeaderboard,
-    fetchTotalScoreMe,
-    fetchBestSingleRunMe,
-  },
+  leaderboardApi: axios.create({
+    baseURL: 'https://clicker-game-leaderboard-service-stage.onrender.com',
+  }),
+  leaderboard,
 }
 
-// Add Authorization header interceptor to game API
-api.gameApi.interceptors.request.use((config) => {
-  try {
-    const token = Cookies.get('token')
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`
+const attachAuth = (client: typeof api.gameApi) => {
+  client.interceptors.request.use((config) => {
+    try {
+      const token = Cookies.get('token')
+      if (token && config.headers) {
+        config.headers.Authorization = `Bearer ${token}`
+      }
+    } catch (e) {
+      void e
     }
-  } catch (e) {
-    void e
-  }
-  return config
-})
+    return config
+  })
+}
+
+attachAuth(api.gameApi)
+attachAuth(api.leaderboardApi)

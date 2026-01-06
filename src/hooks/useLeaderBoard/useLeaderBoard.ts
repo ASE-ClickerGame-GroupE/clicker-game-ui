@@ -2,12 +2,7 @@ import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
 import { api } from '../../api'
-import type {
-  TotalScoreResponse,
-  BestSingleRunResponse,
-  TotalScoreMeResponse,
-  BestSingleRunMeResponse,
-} from '../../api/leaderboard/mock'
+import type { LeaderboardRowDTO } from '../../api/leaderboard/types.ts'
 
 export type LeaderboardMode = 'total' | 'best'
 
@@ -22,57 +17,28 @@ export type LeaderboardRowUI = {
 
 const mapTopRows = (
   mode: LeaderboardMode,
-  res: TotalScoreResponse | BestSingleRunResponse
+  rows: LeaderboardRowDTO[]
 ): LeaderboardRowUI[] => {
-  if (mode === 'total') {
-    const r = res as TotalScoreResponse
-    return r.data.map((x) => ({
-      id: x.id,
-      place: x.place,
-      userName: x.userName,
-      totalGames: x.totalGames,
-      score: x.totalScores,
-    }))
-  }
-
-  const r = res as BestSingleRunResponse
-  return r.data.map((x) => ({
+  return rows.map((x) => ({
     id: x.id,
     place: x.place,
     userName: x.userName,
     totalGames: x.totalGames,
-    score: x.bestScore,
+    score: mode === 'total' ? x.totalScores : x.bestScore,
   }))
 }
 
 const mapMeRow = (
   mode: LeaderboardMode,
-  res: TotalScoreMeResponse | BestSingleRunMeResponse
-): LeaderboardRowUI | null => {
-  if (mode === 'total') {
-    const r = res as TotalScoreMeResponse
-    if (!r.me) return null
-    return {
-      id: r.me.id,
-      place: r.me.place,
-      userName: r.me.userName,
-      totalGames: r.me.totalGames,
-      score: r.me.totalScores,
-      isMe: true,
-    }
-  }
-
-  const r = res as BestSingleRunMeResponse
-  if (!r.me) return null
-  return {
-    id: r.me.id,
-    place: r.me.place,
-    userName: r.me.userName,
-    totalGames: r.me.totalGames,
-    score: r.me.bestScore,
-    isMe: true,
-  }
-}
+  me: LeaderboardRowDTO
+): LeaderboardRowUI => ({
+  id: me.id,
+  place: me.place,
+  userName: me.userName,
+  totalGames: me.totalGames,
+  score: mode === 'total' ? me.totalScores : me.bestScore,
+  isMe: true,
+})
 
 export const useLeaderBoard = (mode: LeaderboardMode) => {
   const token = Cookies.get('token')
@@ -82,7 +48,7 @@ export const useLeaderBoard = (mode: LeaderboardMode) => {
   // 1) Top list: always
   const topQuery = useQuery({
     queryKey: ['leaderboard', mode, 'top', authKey],
-    queryFn: async () => {
+    queryFn: async (): Promise<LeaderboardRowDTO[]> => {
       if (mode === 'total') {
         return await api.leaderboard.fetchTotalScoreLeaderboard()
       }
@@ -97,14 +63,14 @@ export const useLeaderBoard = (mode: LeaderboardMode) => {
     queryKey: ['leaderboard', mode, 'me', authKey],
     enabled: isLoggedIn,
     retry: false,
-    queryFn: async () => {
+    queryFn: async (): Promise<LeaderboardRowDTO | null> => {
       try {
         if (mode === 'total') {
           return await api.leaderboard.fetchTotalScoreMe()
         }
         return await api.leaderboard.fetchBestSingleRunMe()
       } catch {
-        return { me: null }
+        return null
       }
     },
     staleTime: 30_000,
@@ -115,11 +81,13 @@ export const useLeaderBoard = (mode: LeaderboardMode) => {
     if (!topQuery.data) return []
 
     const topRows = mapTopRows(mode, topQuery.data)
-    const meRow = meQuery.data ? mapMeRow(mode, meQuery.data) : null
+    const meDTO = meQuery.data ?? null
 
-    if (!meRow) return topRows
+    if (!meDTO) return topRows
 
+    const meRow = mapMeRow(mode, meDTO)
     const topWithoutMe = topRows.filter((r) => r.id !== meRow.id)
+
     return [meRow, ...topWithoutMe]
   }, [mode, topQuery.data, meQuery.data])
 
